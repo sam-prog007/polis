@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { InstagramGlyph } from "@/components/CommitPrompts";
+import { DeleteAllData } from "@/components/DeleteAllData";
 import { Trophies } from "@/components/Trophies";
 import { Button, ButtonLink, Card, Page } from "@/components/ui";
 import { setLang, useContent, useLang, useT } from "@/lib/i18n";
@@ -18,7 +19,6 @@ export function ProfileClient() {
   const lang = useLang();
   const { total } = useVoix();
   const [mounted, setMounted] = useState(false);
-  const [confirmWipe, setConfirmWipe] = useState(false);
   const ob = c.onboarding;
 
   useEffect(() => setMounted(true), []);
@@ -33,22 +33,18 @@ export function ProfileClient() {
         </Card>
         <ButtonLink href="/bienvenue">{t("Faire mon profil", "Set up my profile")}</ButtonLink>
         <Trophies />
+        <Card className="flex flex-col gap-3">
+          <Link href="/donnees-personnelles" className="font-semibold underline underline-offset-4">
+            {t("Données personnelles", "Personal data")}
+          </Link>
+          <DeleteAllData />
+        </Card>
       </Page>
     );
   }
 
   const update = (patch: Partial<Profile>) => saveProfile({ ...p, ...patch });
   const toggleTopic = (id: string) => update({ interests: p.interests.includes(id) ? p.interests.filter((x) => x !== id) : [...p.interests, id] });
-
-  const wipe = () => {
-    try {
-      Object.keys(localStorage)
-        .filter((k) => k.startsWith("p27."))
-        .forEach((k) => localStorage.removeItem(k));
-      sessionStorage.clear();
-    } catch {}
-    window.location.href = "/";
-  };
 
   return (
     <Page>
@@ -171,23 +167,7 @@ export function ProfileClient() {
         <Link href="/donnees-personnelles" className="font-semibold underline underline-offset-4">
           {t("Données personnelles", "Personal data")}
         </Link>
-        {!confirmWipe ? (
-          <Button variant="ghost" className="!text-bad" onClick={() => setConfirmWipe(true)}>
-            {t("Effacer toutes mes données sur ce téléphone", "Delete all my data on this phone")}
-          </Button>
-        ) : (
-          <div className="flex flex-col gap-2 rounded-2xl bg-bad-soft p-4">
-            <p className="font-semibold">{t("Tes voix, ta ville, tes trophées et ton profil seront effacés. On continue ?", "Your voix, city, badges and profile will be deleted. Continue?")}</p>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="secondary" onClick={() => setConfirmWipe(false)}>
-                {t("Annuler", "Cancel")}
-              </Button>
-              <Button onClick={wipe} className="!bg-bad">
-                {t("Tout effacer", "Delete all")}
-              </Button>
-            </div>
-          </div>
-        )}
+        <DeleteAllData />
       </Card>
     </Page>
   );

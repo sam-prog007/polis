@@ -91,6 +91,8 @@ Answered by the team on 2026-11-13, except D5.
 
 **Goal:** one button in the profile erases the player's data **on the phone and on the server**.
 
+**Status: done on 2026-11-19.** Run `supabase/migrations/2026-11-match-players-session.sql` in Supabase. Until then team-match rows are still erased through the player ids kept on the phone, and joining a match keeps working. The privacy page hides the contact email until `content/site.json` has a real one.
+
 **Today:** "Effacer toutes mes données sur ce téléphone" (`app/profil/ProfileClient.tsx`) only clears `localStorage`. These Supabase rows stay:
 
 | Table | Linked by | What it holds |

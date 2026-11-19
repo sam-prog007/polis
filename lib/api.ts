@@ -85,8 +85,22 @@ export function fetchMatch(code: string) {
   return get<MatchSummary>(`/api/match?code=${encodeURIComponent(code)}`);
 }
 
-export function joinMatch(matchCode: string, team: "a" | "b", firstName: string) {
-  return post<{ pid: string }>("/api/match/join", { matchCode, team, firstName });
+export function joinMatch(sessionId: string, matchCode: string, team: "a" | "b", firstName: string) {
+  return post<{ pid: string }>("/api/match/join", { sessionId, matchCode, team, firstName });
+}
+
+export type DeleteResult = { ok: boolean; stored: boolean; deleted: Record<string, number> };
+
+/** Erases this phone's rows on the server. Returns null if the server could not be reached or failed. */
+export async function deleteMyData(sessionId: string, pids: string[]): Promise<DeleteResult | null> {
+  try {
+    const res = await fetch("/api/me", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sessionId, pids }) });
+    if (!res.ok) return null;
+    const data = (await res.json()) as DeleteResult;
+    return data.ok ? data : null;
+  } catch {
+    return null;
+  }
 }
 
 export function finishMatch(matchCode: string, pid: string, score: number, total: number, voix: number) {

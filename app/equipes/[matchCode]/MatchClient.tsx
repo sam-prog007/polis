@@ -8,7 +8,7 @@ import { Button, ButtonLink, Card, Page } from "@/components/ui";
 import { fetchMatch, joinMatch, type MatchSummary, type TeamSummary } from "@/lib/api";
 import { useContent, useT } from "@/lib/i18n";
 import { levelIndexFor } from "@/lib/levels";
-import { getFirstName, setFirstName, siteUrl } from "@/lib/session";
+import { getFirstName, getSessionId, setFirstName, siteUrl } from "@/lib/session";
 import { readJSON, writeJSON } from "@/lib/storage";
 import { track } from "@/lib/track";
 import { VOIX, addVoix } from "@/lib/voix";
@@ -72,7 +72,7 @@ export function MatchClient() {
     if (team !== "a" && team !== "b") return;
     setJoining(true);
     setFirstName(name);
-    const res = await joinMatch(code, team, name.trim());
+    const res = await joinMatch(getSessionId(), code, team, name.trim());
     if (!res?.pid) {
       setJoining(false);
       setError(tr("Impossible de rejoindre le match. Vérifie ta connexion et réessaie.", "Couldn't join the match. Check your connection and try again."));

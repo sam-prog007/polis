@@ -213,13 +213,20 @@ function FriendLanding({ code }: { code: string }) {
               : t(`${who} t'a défié·e : ${loaded.score}/${loaded.total} au défi « ${challengeName} ».`, `${who} challenged you: ${loaded.score}/${loaded.total} on "${challengeName}".`)}
           </h1>
         ) : (
-          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight">{t("Un·e ami·e t'a défié·e…", "A friend challenged you…")}</h1>
+          <>
+            <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight">{t("Ce défi n'existe plus", "This challenge no longer exists")}</h1>
+            <p className="mt-2 text-[15px] opacity-90">
+              {t("Il a peut-être été supprimé par la personne qui l'a créé. Choisis un défi et joue quand même !", "Its creator may have deleted it. Pick a challenge and play anyway!")}
+            </p>
+          </>
         )}
-        <ol className="mt-3 flex flex-col gap-1 text-[15px] opacity-90">
-          <li>1. {t("Tu joues les mêmes questions que ton ami.", "You play the same questions as your friend.")}</li>
-          <li>2. {t("Après chaque réponse, on t'explique la bonne réponse.", "After each answer, we explain the right one.")}</li>
-          <li>3. {t("À la fin, vous comparez vos scores.", "At the end, you compare scores.")}</li>
-        </ol>
+        {ref !== "missing" && (
+          <ol className="mt-3 flex flex-col gap-1 text-[15px] opacity-90">
+            <li>1. {t("Tu joues les mêmes questions que ton ami.", "You play the same questions as your friend.")}</li>
+            <li>2. {t("Après chaque réponse, on t'explique la bonne réponse.", "After each answer, we explain the right one.")}</li>
+            <li>3. {t("À la fin, vous comparez vos scores.", "At the end, you compare scores.")}</li>
+          </ol>
+        )}
       </section>
       <Card className="flex flex-col gap-2">
         <label htmlFor="firstName" className="text-sm font-semibold">
@@ -236,7 +243,7 @@ function FriendLanding({ code }: { code: string }) {
         />
       </Card>
       <Button onClick={play} disabled={ref === null}>
-        {t("Relever le défi", "Take the challenge")}
+        {ref === "missing" ? t("Choisir un défi", "Pick a challenge") : t("Relever le défi", "Take the challenge")}
       </Button>
       <Link href="/" className="min-h-11 text-center font-semibold text-muted underline underline-offset-4">
         {t("Découvrir le jeu depuis le début", "Discover the game from the start")}

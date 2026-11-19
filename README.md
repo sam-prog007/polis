@@ -53,6 +53,8 @@ npm run dev                  # http://localhost:3000
 
 Without Supabase the app still runs: you can read the feed, play every solo challenge and grow your city. Nothing is saved on the server. Friend links, team matches and `/stats` need Supabase.
 
+**Deleting a player's data:** the profile button "Supprimer toutes mes informations" calls `DELETE /api/me`, which erases every row linked to the phone's random id (`events`, `challenges`, `predictions`, `emails`, `accounts`, `match_players`), then clears the phone. Anonymous feed reactions have no id, so they can't be found or deleted.
+
 ### Environment variables
 
 | Variable | What |
@@ -67,6 +69,8 @@ Without Supabase the app still runs: you can read the feed, play every solo chal
 1. Create a free project at <https://supabase.com>.
 2. In **SQL Editor › New query**, paste `supabase/schema.sql` and click **Run**.
 3. In **Project Settings › API**, copy the **Project URL** into `SUPABASE_URL` and the **service_role** key into `SUPABASE_SERVICE_ROLE_KEY`.
+
+**Already set up before a change?** Run the matching file in `supabase/migrations/` the same way (each file is safe to run twice). Current one: `2026-11-match-players-session.sql`, needed so the delete button also erases team-match rows.
 
 Row Level Security is on for every table, with no policy. The browser never talks to Supabase: every read and write goes through `app/api/*` with the service key, so `accounts`, `emails`, `events` and `predictions` can never be read from the client.
 
@@ -138,7 +142,8 @@ components/          UI: City (SVG), ChallengePlayer (challenge engines), ShareS
 lib/                 content loader, points rules, feed rule, difficulty, i18n, tracking
 lib/server/db.ts     Supabase client (service key, server only)
 content/             all editable content (JSON)
-supabase/schema.sql  database tables + RLS
+supabase/schema.sql  database tables + RLS (fresh setup)
+supabase/migrations/ changes to run on an existing database
 public/brand/        logos
 docs/                decision log, design handoff, brand, product notes
 ```

@@ -6,6 +6,8 @@ import { useContent, useT } from "@/lib/i18n";
 export function PrivacyClient() {
   const c = useContent();
   const t = useT();
+  // site.json ships with a placeholder: only show a real address.
+  const contact = /@/.test(c.site.contactEmail) && !/^todo/i.test(c.site.contactEmail) ? c.site.contactEmail : null;
   return (
     <Page>
       <h1 className="font-display text-3xl font-extrabold">{t("Données personnelles", "Personal data")}</h1>
@@ -38,14 +40,31 @@ export function PrivacyClient() {
         <h2 className="font-display text-lg font-bold">{t("Pourquoi et combien de temps", "Why and for how long")}</h2>
         <p>
           {t(
-            `Uniquement pour savoir si l'idée plaît et l'améliorer. Tout est supprimé à la ${c.site.projectEnd}. Tes voix sont stockées dans ton navigateur : tu peux les effacer depuis ton profil.`,
-            `Only to find out whether people like the idea and to improve it. Everything is deleted at the ${c.site.projectEnd}. Your voix are stored in your browser: you can delete them from your profile.`,
+            `Uniquement pour savoir si l'idée plaît et l'améliorer. Tout est supprimé à la ${c.site.projectEnd}.`,
+            `Only to find out whether people like the idea and to improve it. Everything is deleted at the ${c.site.projectEnd}.`,
           )}
         </p>
-        <h2 className="font-display text-lg font-bold">{t("Contact", "Contact")}</h2>
+        <h2 className="font-display text-lg font-bold">{t("Tout supprimer, quand tu veux", "Delete everything, whenever you want")}</h2>
         <p>
-          {t("Pour accéder à tes données ou les faire supprimer :", "To access your data or have it deleted:")} <strong className="break-all">{c.site.contactEmail}</strong>
+          {t(
+            "Dans ton profil, le bouton « Supprimer toutes mes informations » efface tout d'un coup : sur ce téléphone (voix, ville, trophées, profil) et sur notre serveur (compte, email, défis, scores, pronostics, matchs en équipe, statistiques d'usage). C'est définitif.",
+            "In your profile, the \"Delete all my information\" button erases everything at once: on this phone (voix, city, badges, profile) and on our server (account, email, challenges, scores, predictions, team matches, usage statistics). This is permanent.",
+          )}
         </p>
+        <p>
+          {t(
+            "Le bouton efface ce qui est lié à ce téléphone. Si tu as aussi joué sur un autre téléphone, appuie sur le bouton là-bas aussi. Les 👍 / 👎 du fil sont enregistrés sans aucun identifiant : on ne peut pas savoir lesquels sont les tiens, donc on ne peut pas les supprimer.",
+            "The button erases what is linked to this phone. If you also played on another phone, press the button there too. Feed 👍 / 👎 are recorded without any identifier: we can't tell which ones are yours, so we can't delete them.",
+          )}
+        </p>
+        {contact && (
+          <>
+            <h2 className="font-display text-lg font-bold">{t("Contact", "Contact")}</h2>
+            <p>
+              {t("Pour accéder à tes données ou demander leur suppression par email :", "To access your data or ask for it to be deleted by email:")} <strong className="break-all">{contact}</strong>
+            </p>
+          </>
+        )}
       </Card>
     </Page>
   );

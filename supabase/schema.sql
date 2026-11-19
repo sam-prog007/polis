@@ -1,5 +1,6 @@
 -- Présidentielle 2027 : le jeu — Supabase schema
 -- Run once in the Supabase SQL editor (Project > SQL Editor > New query > paste > Run).
+-- A database created before a change needs the matching file in supabase/migrations/ instead.
 
 create extension if not exists pgcrypto;
 
@@ -25,6 +26,7 @@ create table if not exists challenges (
   ref_code text                  -- code of the friend's challenge this one answers (no FK: the friend's row may be missing)
 );
 create index if not exists challenges_ref_idx on challenges (ref_code);
+create index if not exists challenges_session_idx on challenges (session_id);
 
 create table if not exists predictions (
   id bigint generated always as identity primary key,
@@ -33,6 +35,7 @@ create table if not exists predictions (
   question_id text not null,
   answer text not null
 );
+create index if not exists predictions_session_idx on predictions (session_id);
 
 create table if not exists matches (
   code text primary key,
@@ -50,9 +53,11 @@ create table if not exists match_players (
   first_name text,
   score int,                     -- null until the player finishes
   total int,
-  voix int not null default 0
+  voix int not null default 0,
+  session_id text               -- the player's phone id, so "Supprimer toutes mes informations" can erase the row
 );
 create index if not exists match_players_match_idx on match_players (match_code);
+create index if not exists match_players_session_idx on match_players (session_id);
 
 create table if not exists emails (
   id bigint generated always as identity primary key,
@@ -61,6 +66,7 @@ create table if not exists emails (
   session_id text,
   consent boolean not null check (consent)
 );
+create index if not exists emails_session_idx on emails (session_id);
 
 create table if not exists accounts (
   id bigint generated always as identity primary key,
@@ -69,6 +75,7 @@ create table if not exists accounts (
   session_id text,               -- last device that signed up with this email
   first_name text
 );
+create index if not exists accounts_session_idx on accounts (session_id);
 
 -- Row Level Security: ON for every table, with NO policy for the anon/authenticated roles.
 -- The browser never talks to Supabase directly: all reads and writes go through the Next.js
