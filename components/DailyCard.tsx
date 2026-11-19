@@ -39,9 +39,9 @@ export function DailyCard() {
   const name = c.defis.names[type];
 
   return (
-    <section className="pop flex flex-col gap-3 rounded-[22px] bg-card p-5" aria-label={t("Défi du jour", "Daily challenge")}>
+    <section className="pop flex flex-col gap-3 tile rounded-[22px] p-5" aria-label={t("Défi du jour", "Daily challenge")}>
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-bold uppercase tracking-wider text-accent">📅 {t("Défi du jour", "Daily challenge")}</p>
+        <p className="kicker">📅 {t("Défi du jour", "Daily challenge")}</p>
         {streak.current > 0 && (
           <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-extrabold text-accent">
             🔥 {daysLabel(streak.current, t)}

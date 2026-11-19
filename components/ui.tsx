@@ -21,7 +21,7 @@ export function ButtonLink({ variant = "primary", className = "", ...props }: Co
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-[22px] bg-card p-5 ${className}`}>{children}</div>;
+  return <div className={`tile rounded-[22px] p-5 ${className}`}>{children}</div>;
 }
 
 export function SourceLink({ label, url }: { label: string; url: string }) {
@@ -32,6 +32,17 @@ export function SourceLink({ label, url }: { label: string; url: string }) {
   );
 }
 
-export function Page({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <main className={`mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-4 pb-10 pt-5 ${className}`}>{children}</main>;
+/**
+ * Page column. The top padding leaves room for the floating avatar and back button (--top-space);
+ * `home` starts higher, because the home page puts its logo on the same line as the avatar.
+ */
+export function Page({ children, className = "", home = false }: { children: ReactNode; className?: string; home?: boolean }) {
+  return (
+    <main
+      className={`mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-4 pb-10 ${className}`}
+      style={{ paddingTop: home ? "calc(env(safe-area-inset-top, 0px) + 0.75rem)" : "var(--top-space)" }}
+    >
+      {children}
+    </main>
+  );
 }

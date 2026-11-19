@@ -44,14 +44,14 @@ export function BadgeToast() {
         onClick={() => setQueue((q) => q.slice(1))}
         role="status"
         aria-live="polite"
-        className="pop pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-[18px] bg-hero p-3 pr-4 text-white shadow-xl"
+        className="glass pop pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-[18px] p-3 pr-4 text-ink"
       >
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/15 text-2xl" aria-hidden>
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-accent-soft text-2xl" aria-hidden>
           {badge.emoji}
         </span>
         <span className="min-w-0">
-          <span className="block text-xs font-bold uppercase tracking-wider text-accent">{t("Trophée débloqué", "Badge unlocked")}</span>
-          <span className="block truncate font-display text-lg font-bold">{badge.name}</span>
+          <span className="kicker block !text-xs">{t("Trophée débloqué", "Badge unlocked")}</span>
+          <span className="block truncate font-display text-lg font-bold text-hero">{badge.name}</span>
         </span>
       </Link>
     </div>

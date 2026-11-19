@@ -107,7 +107,7 @@ export function CityClient() {
     <Page>
       <div className="flex items-end justify-between gap-3">
         <div>
-          <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Ma ville", "My city")}</p>
+          <p className="kicker">{t("Ma ville", "My city")}</p>
           <h1 className="font-display text-4xl font-extrabold leading-none">{level.name}</h1>
         </div>
         <p className="font-display text-2xl font-bold tabular-nums">{total} voix</p>
@@ -150,7 +150,7 @@ export function CityClient() {
             {upcoming[0].emoji}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-xs font-bold uppercase tracking-wider text-accent">{t("Prochaine découverte", "Next discovery")}</span>
+            <span className="kicker block !text-xs">{t("Prochaine découverte", "Next discovery")}</span>
             <span className="block truncate font-semibold">{upcoming.map((b) => b.name).join(t(" et ", " and "))}</span>
           </span>
           <span className="shrink-0 text-sm font-bold tabular-nums text-muted">{next!.min - total} voix</span>
@@ -166,7 +166,7 @@ export function CityClient() {
               <li key={b.id}>
                 <button
                   onClick={() => open(b.id)}
-                  className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${built ? "border-transparent bg-card" : "border-dashed border-muted/40 bg-transparent"} ${selected === b.id ? "ring-2 ring-accent" : ""}`}
+                  className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${built ? "border-line bg-card" : "border-dashed border-muted/40 bg-transparent"} ${selected === b.id ? "ring-2 ring-accent" : ""}`}
                 >
                   <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xl ${built ? "bg-accent-soft" : "bg-line/60 grayscale"}`} aria-hidden>
                     {b.emoji}

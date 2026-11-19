@@ -55,7 +55,7 @@ export function FriseClient() {
   return (
     <Page>
       <div>
-        <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Frise", "Timeline")}</p>
+        <p className="kicker">{t("Frise", "Timeline")}</p>
         <h1 className="font-display text-4xl font-extrabold leading-none">{t("La ligne du temps", "The timeline")}</h1>
         <p className="mt-2 text-muted">{t("D'où viennent les candidats, les débats qui ont marqué, et l'histoire qui explique aujourd'hui.", "Where the candidates come from, the debates people remember, and the history that explains today.")}</p>
       </div>
@@ -70,7 +70,7 @@ export function FriseClient() {
               haptic("tap");
               router.replace(`/frise?piste=${tr.id}`, { scroll: false });
             }}
-            className={`flex min-h-20 flex-col items-center justify-center gap-1 rounded-2xl border-2 px-1 text-center text-[13px] font-bold leading-tight transition active:scale-[0.97] ${current === tr.id ? "border-accent bg-accent-soft" : "border-transparent bg-card"}`}
+            className={`flex min-h-20 flex-col items-center justify-center gap-1 rounded-2xl border-2 px-1 text-center text-[13px] font-bold leading-tight transition active:scale-[0.97] ${current === tr.id ? "border-accent bg-accent-soft" : "border-line bg-card"}`}
           >
             <span className="text-2xl" aria-hidden>
               {tr.emoji}
@@ -133,7 +133,7 @@ function EventCard({ event, open, onToggle, children }: { event: TimelineEvent; 
   const lang = useLang();
   const hasMore = !!event.why || !!children;
   return (
-    <div className="rounded-[22px] bg-card p-4">
+    <div className="tile rounded-[22px] p-4">
       <p className="text-sm font-bold text-accent">{formatDate(event.date, lang)}</p>
       <h3 className="mt-0.5 font-display text-lg font-bold leading-snug">{event.title}</h3>
       <p className="mt-1 text-[15px] leading-snug">{event.text}</p>
@@ -208,9 +208,9 @@ function CandidatesTrack() {
               haptic("tap");
               setSelected(x.id);
             }}
-            className={`flex shrink-0 snap-start flex-col items-center gap-1 rounded-2xl border-2 px-3 py-2 transition active:scale-95 ${x.id === selected ? "border-accent bg-accent-soft" : "border-transparent bg-card"}`}
+            className={`flex shrink-0 snap-start flex-col items-center gap-1 rounded-2xl border-2 px-3 py-2 transition active:scale-95 ${x.id === selected ? "border-accent bg-accent-soft" : "border-line bg-card"}`}
           >
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-hero font-display text-lg font-extrabold text-white">{initials(x.name)}</span>
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-accent-soft font-display text-lg font-extrabold text-hero">{initials(x.name)}</span>
             <span className="max-w-20 text-center text-xs font-semibold leading-tight">{x.name}</span>
           </button>
         ))}
@@ -219,7 +219,7 @@ function CandidatesTrack() {
       {cand && (
         <>
           <Card className="pop flex items-center gap-4 !p-4" key={cand.id}>
-            <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-hero font-display text-2xl font-extrabold text-white">{initials(cand.name)}</span>
+            <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-accent-soft font-display text-2xl font-extrabold text-hero">{initials(cand.name)}</span>
             <div className="min-w-0">
               <h2 className="font-display text-2xl font-extrabold leading-tight">{cand.name}</h2>
               <p className="flex items-center gap-1.5 text-sm font-semibold text-muted">
@@ -271,9 +271,9 @@ function DebatesTrack() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1 rounded-[22px] bg-hero p-4 text-white">
-        <p className="font-display text-xl font-extrabold">🎙️ {t("Qui a dit ça ?", "Who said that?")}</p>
-        <p className="text-[15px] leading-snug opacity-90">
+      <div className="hero flex flex-col gap-1 rounded-[22px] p-4">
+        <p className="font-display text-xl font-extrabold text-hero">🎙️ {t("Qui a dit ça ?", "Who said that?")}</p>
+        <p className="text-[15px] leading-snug text-muted">
           {t(`Une phrase culte par débat d'entre-deux-tours. Devine qui l'a dite : +${QUOTE_VOIX} voix par bonne réponse.`, `One famous line per debate between the two rounds. Guess who said it: +${QUOTE_VOIX} voix per right answer.`)}
         </p>
         <p className="text-sm font-semibold text-accent">
@@ -312,7 +312,7 @@ function DebateCard({ debate }: { debate: TimelineDebate }) {
   };
 
   return (
-    <div className="rounded-[22px] bg-card p-4">
+    <div className="tile rounded-[22px] p-4">
       <p className="text-sm font-bold text-accent">{formatDate(debate.date, lang)}</p>
       <h3 className="mt-0.5 font-display text-lg font-bold leading-snug">{debate.title}</h3>
       <p className="text-sm font-semibold text-muted">{debate.people.join(" – ")}</p>

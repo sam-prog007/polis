@@ -32,7 +32,7 @@ export function RemindMe({ compact = false, onDark = false }: { compact?: boolea
 
   const chip = onDark ? "bg-white/15 text-white" : "bg-fill text-accent";
   return (
-    <div className={`flex flex-col gap-2 ${compact ? "" : "rounded-[22px] bg-card p-4"}`}>
+    <div className={`flex flex-col gap-2 ${compact ? "" : "tile rounded-[22px] p-4"}`}>
       {!compact && (
         <p className="font-display text-lg font-bold">
           📅 {t("Rappelle-moi demain", "Remind me tomorrow")} <span className="text-sm font-semibold text-accent">+{VOIX.reminder} voix</span>

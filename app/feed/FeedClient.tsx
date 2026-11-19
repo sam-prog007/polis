@@ -30,11 +30,11 @@ export function FeedClient() {
   if (!mounted) return <div className="flex-1" />;
   if (!profile.done && !skipProfile) {
     return (
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-4 px-4 py-8">
-        <div className="rounded-[2rem] bg-hero p-6 text-white">
-          <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Ton fil d'actu", "Your news feed")}</p>
-          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight">{t("Une minute pour l'adapter à toi ?", "One minute to make it yours?")}</h1>
-          <p className="mt-2 opacity-90">{t("Ton niveau et tes sujets, pour des actus utiles. Tu verras toujours tous les bords.", "Your level and topics, for useful news. You will always see every side.")}</p>
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-4 px-4 pb-8 pt-[var(--top-space)]">
+        <div className="hero rounded-[2rem] p-6">
+          <p className="kicker">{t("Ton fil d'actu", "Your news feed")}</p>
+          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight text-hero">{t("Une minute pour l'adapter à toi ?", "One minute to make it yours?")}</h1>
+          <p className="mt-2 text-muted">{t("Ton niveau et tes sujets, pour des actus utiles. Tu verras toujours tous les bords.", "Your level and topics, for useful news. You will always see every side.")}</p>
         </div>
         <ButtonLink href="/bienvenue">{t("Faire mon profil", "Set up my profile")}</ButtonLink>
         <Button variant="secondary" onClick={() => setSkipProfile(true)}>
@@ -167,8 +167,8 @@ function Feed() {
   return (
     <div className="relative mx-auto w-full max-w-md flex-1">
       {/* Header: progress + why these cards */}
-      <div className="absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-paper via-paper/90 to-transparent px-4 pb-4 pt-2">
-        <div className="flex items-center gap-3">
+      <div className="absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-paper via-paper/90 to-transparent pb-4 pl-4 pr-[4.5rem]" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.75rem)" }}>
+        <div className="flex h-11 items-center gap-3">
           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-line" aria-hidden>
             <div className="h-full rounded-full bg-accent transition-all duration-300" style={{ width: `${(currentCardNumber / total) * 100}%` }} />
           </div>
@@ -203,22 +203,22 @@ function Feed() {
 
       <div
         ref={scroller}
-        className="no-scrollbar h-[calc(100dvh-3.5rem-4.25rem-env(safe-area-inset-top,0px)-env(safe-area-inset-bottom,0px))] snap-y snap-mandatory overflow-y-auto overscroll-contain"
+        className="no-scrollbar h-[calc(100dvh-var(--nav-space))] snap-y snap-mandatory overflow-y-auto overscroll-contain"
       >
         {sections.map((s, pos) => (
-          <section key={s.kind === "card" ? s.card.id : s.kind === "challenge" ? `challenge-${s.n}` : s.kind} data-pos={pos} className="no-scrollbar flex h-full snap-start snap-always flex-col overflow-y-auto pb-6 pl-4 pr-[4.25rem] pt-12">
+          <section key={s.kind === "card" ? s.card.id : s.kind === "challenge" ? `challenge-${s.n}` : s.kind} data-pos={pos} className="no-scrollbar flex h-full snap-start snap-always flex-col overflow-y-auto pb-6 pl-4 pr-[4.25rem] pt-[var(--top-space)]">
             <div className="my-auto">
             {s.kind === "card" && <CardView card={s.card} reaction={reactions[s.card.id]} onReact={(r) => react(s.card, r)} first={pos === 0} />}
             {s.kind === "challenge" && <InlineChallenge readCards={s.readCards} used={usedQuestions.current} onContinue={() => goTo(pos + 1)} />}
             {s.kind === "end" && (
-              <div className="pop flex flex-col gap-4 rounded-[2rem] bg-hero p-6 text-white shadow-lg">
+              <div className="hero pop flex flex-col gap-4 rounded-[2rem] p-6">
                 <p className="text-4xl" aria-hidden>
                   🎉
                 </p>
-                <h2 className="font-display text-3xl font-extrabold leading-tight">{t("Tu es à jour sur la campagne !", "You're up to date on the campaign!")}</h2>
-                <p className="opacity-90">{t("De nouvelles actus arrivent régulièrement jusqu'au 18 avril.", "New stories keep coming until 18 April.")}</p>
+                <h2 className="font-display text-3xl font-extrabold leading-tight text-hero">{t("Tu es à jour sur la campagne !", "You're up to date on the campaign!")}</h2>
+                <p className="text-muted">{t("De nouvelles actus arrivent régulièrement jusqu'au 18 avril.", "New stories keep coming until 18 April.")}</p>
                 <ButtonLink href="/quiz">{t("Tester ce que j'ai retenu", "Test what I remember")}</ButtonLink>
-                <Link href="/defis" className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-white/15 text-white font-semibold">
+                <Link href="/defis" className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-fill font-semibold text-accent">
                   {t("Voir les défis", "See the challenges")}
                 </Link>
               </div>
@@ -240,7 +240,7 @@ function CardView({ card, reaction, onReact, first }: { card: FeedCard; reaction
   const date = formatDate(card.date, c.lang);
   return (
     <div className="flex flex-col gap-3">
-      <article className="flex flex-col overflow-hidden rounded-[22px] bg-card shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+      <article className="tile flex flex-col overflow-hidden rounded-[22px]">
         <div className="flex items-center justify-between gap-2 bg-accent-soft px-5 py-3 text-sm font-bold">
           <span className="inline-flex items-center gap-2">
             <span className="text-lg" aria-hidden>
@@ -298,7 +298,7 @@ function CardView({ card, reaction, onReact, first }: { card: FeedCard; reaction
             key={r}
             onClick={() => onReact(r)}
             aria-pressed={reaction === r}
-            className={`min-h-12 rounded-2xl border-2 font-semibold transition ${reaction === r ? "border-accent bg-accent-soft text-accent" : "border-transparent bg-card"}`}
+            className={`min-h-12 rounded-2xl border-2 font-semibold transition ${reaction === r ? "border-accent bg-accent-soft text-accent" : "border-line bg-card"}`}
           >
             {r === "up" ? t("👍 Intéressant", "👍 Interesting") : t("👎 Bof", "👎 Meh")}
           </button>

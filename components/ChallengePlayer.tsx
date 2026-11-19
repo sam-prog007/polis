@@ -318,12 +318,12 @@ function Mcq({ item, shuffled, label, disabled, onAnswer }: { item: McqItem; shu
           // Colour classes are exclusive: border-line/bg-card would otherwise win over the red/green ones.
           const state =
             picked === null
-              ? "border-transparent bg-card"
+              ? "border-line bg-card"
               : i === item.answer
                 ? `border-ok bg-ok-soft ${i === picked ? "bump" : ""}`
                 : i === picked
                   ? "shake border-bad bg-bad-soft"
-                  : "border-transparent bg-card opacity-60";
+                  : "border-line bg-card opacity-60";
           return (
             <button key={i} onClick={() => pick(i)} disabled={picked !== null} className={`min-h-14 rounded-[14px] border-2 px-4 py-3 text-left text-[17px] font-medium transition active:scale-[0.99] ${state}`}>
               {text}
@@ -380,7 +380,7 @@ function VraiFaux({ item, disabled, onAnswer }: { item: VraiFauxItem; disabled: 
           onPointerMove={move}
           onPointerUp={up}
           onPointerCancel={up}
-          className={`flex min-h-56 flex-col justify-center rounded-3xl border-2 bg-card p-6 shadow-sm ${done ? (ok ? "border-ok" : "border-bad") : "cursor-grab border-transparent shadow-[0_8px_30px_rgba(0,0,0,0.08)]"}`}
+          className={`flex min-h-56 flex-col justify-center rounded-3xl border-2 bg-card p-6 shadow-sm ${done ? (ok ? "border-ok" : "border-bad") : "cursor-grab border-line shadow-[0_8px_30px_rgba(22,26,51,0.08)]"}`}
           style={{ transform: `translateX(${dx}px) rotate(${dx / 18}deg)`, transition: startX.current === null ? "transform 0.3s ease" : "none" }}
         >
           {hint && (
@@ -482,12 +482,12 @@ function AutreCamp({ item, disabled, onAnswer }: { item: AutreCampItem; disabled
           <div className="flex flex-col gap-3">
             {options.map((o) => {
               const state = !picked
-                ? "border-transparent bg-card"
+                ? "border-line bg-card"
                 : o.kind === "good"
                   ? `border-ok bg-ok-soft ${o.text === picked ? "bump" : ""}`
                   : o.text === picked
                     ? "shake border-bad bg-bad-soft"
-                    : "border-transparent bg-card opacity-60";
+                    : "border-line bg-card opacity-60";
               return (
                 <button key={o.text} onClick={() => pick(o)} disabled={!!picked} className={`min-h-14 rounded-[14px] border-2 px-4 py-3 text-left text-[17px] font-medium transition ${state}`}>
                   « {o.text} »

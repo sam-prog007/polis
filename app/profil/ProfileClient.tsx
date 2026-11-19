@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { InstagramGlyph } from "@/components/CommitPrompts";
-import { DeleteAllData } from "@/components/DeleteAllData";
+import { AVATARS, AvatarFace } from "@/components/Avatar";
+import { Settings } from "@/components/Settings";
 import { Trophies } from "@/components/Trophies";
 import { Button, ButtonLink, Card, Page } from "@/components/ui";
-import { setLang, useContent, useLang, useT } from "@/lib/i18n";
+import { useContent, useT } from "@/lib/i18n";
 import { levelIndexFor } from "@/lib/levels";
 import { isInternational, saveProfile, useProfile, type Profile } from "@/lib/profile";
 import { track } from "@/lib/track";
@@ -16,7 +17,6 @@ export function ProfileClient() {
   const p = useProfile();
   const c = useContent();
   const t = useT();
-  const lang = useLang();
   const { total } = useVoix();
   const [mounted, setMounted] = useState(false);
   const ob = c.onboarding;
@@ -33,12 +33,7 @@ export function ProfileClient() {
         </Card>
         <ButtonLink href="/bienvenue">{t("Faire mon profil", "Set up my profile")}</ButtonLink>
         <Trophies />
-        <Card className="flex flex-col gap-3">
-          <Link href="/donnees-personnelles" className="font-semibold underline underline-offset-4">
-            {t("Données personnelles", "Personal data")}
-          </Link>
-          <DeleteAllData />
-        </Card>
+        <Settings />
       </Page>
     );
   }
@@ -48,8 +43,8 @@ export function ProfileClient() {
 
   return (
     <Page>
-      <div className="flex items-center gap-4">
-        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-hero font-display text-2xl font-extrabold text-white">{(p.firstName || "?").slice(0, 1).toUpperCase()}</span>
+      <div className="flex items-center gap-4 pr-12">
+        <AvatarFace profile={p} className="h-16 w-16 shrink-0 text-3xl" />
         <div className="min-w-0">
           <h1 className="truncate font-display text-3xl font-extrabold">{p.firstName || t("Mon profil", "My profile")}</h1>
           <p className="text-muted">
@@ -59,18 +54,28 @@ export function ProfileClient() {
         </div>
       </div>
 
-      <Trophies />
-
       <Card className="flex flex-col gap-3">
-        <h2 className="font-display text-lg font-bold">{t("Langue", "Language")}</h2>
-        <div className="grid grid-cols-2 gap-1 rounded-[11px] bg-fill p-0.5">
-          {(["fr", "en"] as const).map((l) => (
-            <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l} className={`min-h-8 rounded-[9px] text-[13px] font-semibold transition ${lang === l ? "bg-card text-ink shadow-[0_3px_8px_rgba(0,0,0,0.12),0_3px_1px_rgba(0,0,0,0.04)]" : "text-ink/70"}`}>
-              {l === "fr" ? "Français" : "English"}
-            </button>
-          ))}
+        <h2 className="font-display text-lg font-bold">{t("Mon avatar", "My avatar")}</h2>
+        <p className="-mt-2 text-sm text-muted">{t("Un bâtiment de ta ville, ou ton initiale. Pas de photo : rien à stocker.", "A building from your city, or your initial. No photo: nothing to store.")}</p>
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t("Choisir mon avatar", "Choose my avatar")}>
+          {[{ id: null, emoji: null }, ...AVATARS].map((a) => {
+            const on = p.avatar === a.id;
+            return (
+              <button
+                key={a.id ?? "initial"}
+                onClick={() => update({ avatar: a.id })}
+                aria-pressed={on}
+                aria-label={a.id ? (c.cityBuildings.find((b) => b.id === a.id)?.name ?? a.id) : t("Mon initiale", "My initial")}
+                className={`grid h-12 w-12 place-items-center rounded-full border-2 transition active:scale-95 ${on ? "border-accent" : "border-transparent"}`}
+              >
+                <AvatarFace profile={{ avatar: a.id, firstName: p.firstName }} className="h-10 w-10 text-xl" />
+              </button>
+            );
+          })}
         </div>
       </Card>
+
+      <Trophies />
 
       <Card className="flex flex-col gap-3">
         <h2 className="font-display text-lg font-bold">{t("Mes sujets", "My topics")}</h2>
@@ -164,11 +169,9 @@ export function ProfileClient() {
         >
           <InstagramGlyph size={20} /> {t("Suis polis sur Instagram", "Follow polis on Instagram")}
         </a>
-        <Link href="/donnees-personnelles" className="font-semibold underline underline-offset-4">
-          {t("Données personnelles", "Personal data")}
-        </Link>
-        <DeleteAllData />
       </Card>
+
+      <Settings />
     </Page>
   );
 }

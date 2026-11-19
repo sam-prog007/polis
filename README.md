@@ -138,7 +138,7 @@ Every question has a `difficulty` from 1 (easy) to 3 (hard). Sources and fact-ch
 
 ```
 app/                 pages and API routes (app/api/*)
-components/          UI: City (SVG), ChallengePlayer (challenge engines), ShareSheet, TopBar…
+components/          UI: City (SVG), ChallengePlayer (challenge engines), ShareSheet, FloatingChrome (avatar + back), BottomNav (glass tab bar)…
 lib/                 content loader, points rules, feed rule, difficulty, i18n, tracking
 lib/server/db.ts     Supabase client (service key, server only)
 content/             all editable content (JSON)

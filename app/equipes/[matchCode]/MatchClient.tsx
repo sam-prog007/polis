@@ -128,7 +128,7 @@ export function MatchClient() {
       <p className="rounded-2xl bg-accent-soft px-4 py-3 font-semibold">{tr("Il manque des joueurs ? Envoie le lien de ton équipe !", "Missing players? Send your team's link!")}</p>
       <div className="grid gap-2 text-sm">
         {(["a", "b"] as const).map((t) => (
-          <p key={t} className="break-all rounded-xl bg-card p-3 font-mono">
+          <p key={t} className="break-all tile rounded-xl p-3 font-mono">
             {match.teams[t].name} : {siteUrl()}/equipes/{match.code}?team={t}
           </p>
         ))}

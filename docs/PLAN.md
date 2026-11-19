@@ -120,6 +120,8 @@ Answered by the team on 2026-11-13, except D5.
 
 **Goal:** sober, mostly white, blue for actions, red as a small accent. No top bar.
 
+**Status: done on 2026-11-19.** White tokens and `.tile` / `.hero` / `.kicker` / `.glass` classes in `app/globals.css`; `components/BottomNav.tsx` (glass, 4 tabs), `components/FloatingChrome.tsx` (avatar + back button), `components/Settings.tsx`, `lib/theme.ts`. The left–right slider is still in the profile: it goes in Phase 4 (D2).
+
 **Steps**
 
 1. **Tokens** (`app/globals.css`): `--paper` becomes pure white. Cards are white with a hairline `--line` border and very light shadows, instead of white on grey. Keep blue `--accent` for actions and red `--rouge` for small accents (kickers, countdown, tricolour hairline). Dark mode keeps its own values.

@@ -13,35 +13,46 @@ Users mostly arrive from a link on their phone (WhatsApp, Instagram, a QR code o
 | Rule | Value | Why |
 |---|---|---|
 | Content column | `max-w-md` (448px), centred, `px-4` (16px) gutters | Phone-first; on desktop it stays a phone-width column |
-| Page wrapper | `<Page>`: `flex-col gap-5` (20px), `pt-5` (20px), `pb-10` (40px) | Same rhythm on every screen |
-| Top bar | sticky, `h-14` (56px) + `env(safe-area-inset-top)` | Notch-safe |
-| Bottom nav | fixed, `h-13` (52px) + `env(safe-area-inset-bottom)`, 4 tabs | Thumb reach |
+| Page wrapper | `<Page>`: `flex-col gap-5` (20px), top padding `var(--top-space)` (safe area + 68px, room for the floating buttons), `pb-10` (40px). `<Page home>` starts at safe area + 12px: the home page puts its logo on the avatar's line | Same rhythm on every screen |
+| No top bar (D3) | Floating glass buttons instead: avatar top right (every screen except onboarding and `/stats`), back button top left on sub-pages. Both `h-11 w-11` (44px), 16px from the side, safe area + 12px from the top | Content uses the full screen; the chrome floats over it |
+| Tab bar | Floating glass capsule, `h-16` (64px), 16px from the sides, safe area + 12px from the bottom, max 416px wide, 4 tabs. A spacer of `var(--nav-space)` (safe area + 92px) ends each page so the last content scrolls clear of it | Thumb reach |
 | Bottom sheets | full width up to `max-w-md`, `max-h-[88dvh]`, scroll inside | Native sheet pattern |
 | Feed | full-height vertical snap scroll, one card per screen, `pr-[4.25rem]` to leave room for the arrows | Story-like reading |
 
-There is no tablet or desktop layout: the same column is used at every width. The only width-based change is in the top bar (see Responsive).
+There is no tablet or desktop layout: the same column is used at every width.
 
 ## Design Tokens Used
 
-Colours are CSS variables on `:root`, exposed to Tailwind as `bg-*`, `text-*`, `border-*`. Dark values apply with `prefers-color-scheme: dark`; there is no in-app theme switch.
+Colours are CSS variables on `:root`, exposed to Tailwind as `bg-*`, `text-*`, `border-*`. **Theme setting (D6)** in Profil › Réglages › Apparence: Automatique (default, follows the phone) / Clair / Sombre, saved as `p27.theme`. Clair / Sombre set `data-theme="light"` / `"dark"` on `<html>`; Automatique leaves it unset. Dark values are written twice in `globals.css`: under `@media (prefers-color-scheme: dark)` scoped to `:root:not([data-theme="light"])`, and under `:root[data-theme="dark"]`. Tailwind's `dark:` variant follows the same rule (`@custom-variant dark`). An inline script in `app/layout.tsx` (`lib/theme-script.ts`) applies the saved choice before the first paint, so a reload never flashes the wrong colours.
 
 | Token (Tailwind) | Light | Dark | Usage |
 |---|---|---|---|
-| `paper` | `#f5f6fa` | `#05060d` | App background (white with a hint of blue) |
+| `paper` | `#ffffff` | `#05060d` | App background: pure white |
 | `card` | `#ffffff` | `#141829` | Cards, sheets, bottom nav |
 | `ink` | `#161a33` | `#f3f4fa` | Main text; sheet backdrop at 40% (`bg-ink/40`) |
-| `muted` | `#646b80` | `#9aa0b5` | Secondary text, inactive tabs |
+| `muted` | `#646b80` | `#9aa0b5` | Secondary text |
 | `line` | `#e2e5ef` | `#2b3047` | Hairlines, progress track |
 | `fill` | `rgba(37,70,224,.07)` | `rgba(110,139,255,.14)` | Secondary buttons, chips, icon buttons |
-| `hero` | `#0b1f5c` | `#0f2470` | Navy blocks (home, end of feed, level result). Text on it is always white |
+| `hero` | `#0b1f5c` | `#dfe5ff` | Navy for big titles (`text-hero`), mainly inside `.hero` cards. There are no navy blocks any more |
 | `accent` | `#2546e0` | `#7d97ff` | Blue: primary buttons, links, active tab, progress, voix |
 | `accent-ink` | `#ffffff` | `#0a0f2e` | Text on `accent` |
 | `accent-soft` | `#e9eeff` | `#1a2456` | Topic band on cards, voix pill, selected chips |
-| `rouge` | `#e1000f` | `#ff4d57` | Red accent. On a `bg-hero` block, `bg-accent` turns red and `text-accent` turns light red (`--rouge-light`, `#ff6b72`): countdowns, kickers, buttons. Also the tricolour stripe under the top bar and the city's flags |
+| `rouge` | `#e1000f` | `#ff4d57` | Red, a small accent only: kickers (`.kicker`), countdown pills (`bg-rouge text-white`), the tricolour hairline, the city's flags |
 | `ok` / `ok-soft` | `#18753c` / `#e6f4ea` | `#30d158` / `#0f2e18` | Right answer, "Facile" badge |
 | `bad` / `bad-soft` | `#ce0500` / `#ffe9e9` | `#ff453a` / `#3a1412` | Wrong answer, "Difficile" badge, delete |
 
-Palette (2026-10-21): bleu, blanc, rouge in institutional tones, the national colours rather than any party's. Blue carries the actions, red stays an accent on navy blocks so it never looks like an error.
+Palette (2026-10-21, white design 2026-11-19): bleu, blanc, rouge in institutional tones, the national colours rather than any party's. Mostly white; blue carries the actions; red stays a small accent so it never looks like an error. Recognisably French without looking like a government site: no Marianne, no copy of the State's design system (DSFR).
+
+### Surfaces
+
+| Class | What | Where |
+|---|---|---|
+| `.tile` | `card` background, 1px `line` border, very light shadow (`--shadow`) | Every card (`<Card>`, home shortcuts, hub rows, news card) |
+| `.hero` | `.tile` + a 4px tricolour hairline across the top (blue / white / red) | The cards that used to be navy: home, feed intro and end, hub "Joue avec un ami", voting guide summary, onboarding tutorial and level, quick-challenge result, timeline quiz. Blue title (`text-hero`), red kicker |
+| `.kicker` | `rouge`, 13px, 800, uppercase, tracking 0.06em | Small label above a title |
+| `.tricolour` | Blue / white / red gradient | 3px hairline fixed at the very top of the home page |
+| `.glass` | Liquid glass: `--glass` (white at 60%, dark navy at 55%), `backdrop-filter: blur(20px) saturate(180%)`, 1px light inner edge, soft shadow, top highlight gradient (`::before`) | Tab bar, avatar, back button, "+N voix" bubble, badge toast. Chromium also gets an SVG displacement filter (`#polis-glass`, class `glass-refract` on `<html>`, `components/GlassFilter.tsx`); Safari and Firefox keep the plain blur. `prefers-reduced-transparency: reduce` → solid `--glass-solid` |
+| `.glass-lens` | Tinted glass pill (`--lens`) | The open tab; slides between tabs (0.45s, spring `cubic-bezier(.34,1.45,.55,1)`) |
 
 **Never** use red, blue, pink, green or purple to represent a political side. Sides are shown with a neutral chip (`bg-fill`, `text-muted`) plus an icon: `‹` gauche, `●` centre, `›` droite, `»` extrême droite, `ⓘ` neutre. Greens are allowed only for trees in the city and for right/wrong feedback.
 
@@ -59,7 +70,7 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | Body | `text-[17px] leading-relaxed` | 17px (iOS body) |
 | Secondary | `text-[15px]` / `text-sm` | 15 / 14px |
 | Eyebrow label | `text-sm font-bold uppercase tracking-wider text-accent` | 14px / 700 |
-| Tab label | `text-[10px] font-medium` | 10px (iOS tab bar) |
+| Tab label | `text-[11px] font-semibold` | 11px |
 | Numbers (score, voix, counters) | add `tabular-nums` | — |
 
 ### Radius, elevation, spacing
@@ -71,7 +82,7 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | `rounded-[2rem]` | 32px | Hero cards, sheets (top corners) |
 | `rounded-[14px]` (options) / `rounded-2xl` | 14px / 16px | Answer options / inner boxes ("Pour toi", sides) |
 | `rounded-full` | — | Chips, pills, icon buttons |
-| Card shadow | `0 8px 30px rgba(0,0,0,.06)` | News card only; other cards are flat on `paper` |
+| Card border + shadow | 1px `line` + `--shadow` (`0 1px 2px` + `0 6px 20px`, 4–5% navy) | Every card (`.tile`, `.hero`): on a white page a card needs its hairline |
 | Floating arrow shadow | `0 4px 16px rgba(0,0,0,.12)` | Feed up arrow |
 | Spacing | Tailwind scale: `gap-2` 8px inside groups, `gap-3` 12px in lists, `gap-5` 20px between sections, `p-5` 20px card padding | — |
 
@@ -86,9 +97,11 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | `SourceLink` | — | `label`, `url` | Opens in a new tab with `rel="noopener noreferrer"`; every fact must have one |
 | `Page` | — | `className` | Column wrapper (see Layout) |
 | `Sheet` (`components/Sheet.tsx`) | — | `onClose`, `labelledBy` | Bottom sheet: grabber, drag down 90px to close, backdrop tap, Escape. Locks body scroll and focuses the panel on open |
-| `TopBar` | root / sub-page | — | Back chevron (`text-accent`) only on sub-pages (`ROOTS` list), polis logo (`Logo h-7`), FR/EN pill, voix pill → `/ma-ville` |
-| `BottomNav` | — | — | Actu / Défis / Ma ville / Profil. Hidden on `/`, `/bienvenue`, `/stats`. Active = `text-accent` |
-| `Logo` | light / `onDark` / `mark` | `className`, `onDark`, `mark` | Shows the black file, and the `-white` file in dark mode. Use `onDark` on `hero` cards |
+| `FloatingChrome` | root / sub-page / onboarding | — | Replaces the top bar. Avatar (top right) → `/profil`, ringed by the progress to the next city level (`levelProgress`, accent on `line`); earned voix pop out of it as a glass "+N voix" bubble (1.5s). Back button (top left) only off the 4 tabs (`ROOTS`). On `/bienvenue`: only a FR / EN pill. Hidden on `/stats` |
+| `AvatarFace` | building / initial / icon | `profile`, `className` | The avatar is a city building (`content/city.json`) or the first letter of the name; a neutral person icon with no name. **No photo upload** (it would be personal data to store). Chosen in Profil › Mon avatar, saved in the profile (`avatar`) |
+| `Settings` | — | — | Profil › Réglages: Langue (Français / English), Apparence (Automatique / Clair / Sombre), Données personnelles, "Supprimer toutes mes informations". Shown on both profile screens |
+| `BottomNav` | — | — | Liquid glass capsule, 4 tabs: Accueil / Actu / Défis / Ville (D3). Profile is the avatar. Hidden on the welcome page, `/bienvenue`, `/stats`. Open tab = `text-accent` inside the sliding lens; sub-pages light their parent tab (`/quiz` → Actu; `/voter`, `/frise`, `/equipes`, `/programmes` → Défis); the profile lights none |
+| `Logo` | light / `onDark` / `mark` | `className`, `onDark`, `mark` | Shows the black file, and the `-white` file in dark mode. Only on the home page now (next to the avatar) |
 | `City` | static / `interactive` | `voix`, `label`, `interactive`, `selected`, `onSelect` | SVG scene 360×200. Has its own fixed daylight palette in both themes (it is an illustration and must export to PNG) |
 | `ChallengePlayer` | 5 challenge types | `type`, `mode`, `level`, `fixedIds`, `items`, `refChallenge`, `match` | One question per screen + feedback block |
 | `InlineChallenge` | — | `readCards`, `used`, `onContinue` | "⚡ Défi rapide" inside the feed, every 3 cards |
@@ -112,11 +125,11 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | Feed reaction 👍 / 👎 | Selected | `border-accent bg-accent-soft text-accent`; can be changed; sent anonymously |
 | Feed arrows | First / last card | Up disabled on the first section, down disabled at the end (`opacity-30`) |
 | Feed "Ce que dit chaque camp" | Closed / open | Native `<details>`, chevron rotates 180° |
-| Hub level picker | Selected | iOS segmented control: track `bg-fill`, segments `min-h-8 rounded-[9px] text-[13px] font-semibold`; selected segment is raised: `bg-card text-ink` + shadow `0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04)`. Choice saved in `localStorage` (`p27.levelChoice`) |
-| Hub "Défier un ami" | Toggled | Block turns `bg-accent`; challenge list keeps only friend-compatible challenges; tapping one starts it in friend mode directly |
+| Hub level picker | Selected | iOS segmented control: track `bg-fill`, segments `min-h-8 rounded-[9px] text-[13px] font-semibold`; selected segment is raised: `bg-card text-ink` (`dark:bg-white/20`) + shadow `0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04)`. Same control for the profile settings. Choice saved in `localStorage` (`p27.levelChoice`) |
+| Hub "Défier un ami" | Toggled | Block gets a 2px `accent` ring and the button turns `bg-accent-soft`; challenge list keeps only friend-compatible challenges; tapping one starts it in friend mode directly |
 | City building | Built | Pulsing accent dot; tap → sheet: "Qui décide ?", "Pour toi", source; haptic "tap" |
 | City building | Locked | Dashed outline + 🔒; tap → sheet with the level and voix still needed + "Gagner des voix" |
-| Voix pill (top bar) | Gain | `+N voix` floats up (1.2s), number `bump`s |
+| Avatar | Voix gained | Glass "+N voix" bubble under the avatar (1.5s); the level ring grows (0.7s) |
 | Email form | Error | Inline `text-bad` message under the field, form stays filled |
 | Onboarding step | Any | Back chevron, progress bar, "Tout passer" (jumps to result, shown after the account step), "Passer" per step |
 | Onboarding account step | Sending / error | "Créer mon compte" disabled until the email is valid; "Création…" while sending; inline `text-bad` message on error, form stays filled |
@@ -127,8 +140,6 @@ There are no hover-only interactions: every hover state must also work on tap.
 
 | Breakpoint | Changes |
 |---|---|
-| < 400px | Top bar shows only the logo (the "Présidentielle 2027" caption is hidden: `min-[400px]:inline`) |
-| ≥ 400px | Caption next to the logo |
 | ≥ 448px (`max-w-md`) | Column stops growing, centred on `paper` |
 | `sm` (≥ 640px) | City on "Ma ville" stops scrolling sideways (`w-[170%]` → `sm:w-full`) |
 | Landscape phone | No special layout; the feed snap still works because heights use `dvh` |
@@ -170,11 +181,11 @@ Everything uses `env(safe-area-inset-*)` so it works as a home-screen web app on
 | Feed scroll | Arrow tap / keyboard | `scrollIntoView` smooth | Browser default | — |
 | Haptics | Answer / tap / level up | `navigator.vibrate` patterns in `lib/feedback.ts` (Android only, iOS ignores) | — | — |
 
-`prefers-reduced-motion: reduce` turns all animations and transitions off (0.01ms), stops clouds and birds, and skips haptics.
+`prefers-reduced-motion: reduce` turns all animations and transitions off (0.01ms), including the lens slide and the voix bubble, stops clouds and birds, skips haptics and the glass refraction. `prefers-reduced-transparency: reduce` makes the glass solid.
 
 ## Accessibility Notes
 
-- **Focus order**: top bar (back, logo, FR/EN, voix) → page content top to bottom → bottom nav. In the feed: header (progress, info) → current card → reactions → arrows.
+- **Focus order**: back button → avatar → page content top to bottom → tab bar. In the feed: header (progress, info) → current card → reactions → arrows.
 - **Focus ring**: `:focus-visible` 3px `accent` outline, 2px offset, everywhere. Never remove it.
 - **Sheets**: `role="dialog" aria-modal="true" aria-labelledby`, focus moves to the panel, Escape closes, body scroll locked. Close buttons have `aria-label` "Fermer" / "Close".
 - **Feedback** is announced: feedback block has `role="status" aria-live="polite"`; feed counter `aria-live="polite"`.

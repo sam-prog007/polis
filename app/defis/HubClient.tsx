@@ -58,27 +58,27 @@ export function HubClient() {
   return (
     <Page>
       <div>
-        <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Défis", "Challenges")}</p>
+        <p className="kicker">{t("Défis", "Challenges")}</p>
         <h1 className="font-display text-4xl font-extrabold leading-none">{t("À toi de jouer", "Your turn")}</h1>
       </div>
 
       <DailyCard />
 
       {/* Multiplayer, explained in 3 steps */}
-      <section className={`flex flex-col gap-3 rounded-[2rem] p-5 ${friendFirst ? "bg-accent text-accent-ink" : "bg-hero text-white"}`}>
-        <p className="font-display text-2xl font-extrabold">👫 {t("Joue avec un ami", "Play with a friend")}</p>
+      <section className={`hero flex flex-col gap-3 rounded-[2rem] p-5 ${friendFirst ? "ring-2 ring-accent" : ""}`}>
+        <p className="font-display text-2xl font-extrabold text-hero">👫 {t("Joue avec un ami", "Play with a friend")}</p>
         <ol className="flex flex-col gap-1.5 text-[15px]">
           <li>1. {t("Choisis un défi ci-dessous et joue-le.", "Pick a challenge below and play it.")}</li>
           <li>2. {t("Envoie ton lien (WhatsApp, copier…).", "Send your link (WhatsApp, copy…).")}</li>
           <li>3. {t("Ton ami joue les mêmes questions, sans inscription. Vous comparez vos scores.", "Your friend plays the same questions, no sign-up. You compare scores.")}</li>
         </ol>
-        <p className="text-sm opacity-90">
+        <p className="text-sm text-muted">
           +{VOIX.share} {t("voix quand tu envoies", "voix when you send")}, +{VOIX.friendPlayed} {t("quand ton ami joue", "when your friend plays")}.
         </p>
         <button
           onClick={() => setFriendFirst((v) => !v)}
           aria-pressed={friendFirst}
-          className={`min-h-12 rounded-2xl px-4 font-semibold ${friendFirst ? "bg-paper text-ink" : "bg-accent text-accent-ink"}`}
+          className={`min-h-12 rounded-2xl px-4 font-semibold ${friendFirst ? "bg-accent-soft text-accent" : "bg-accent text-accent-ink"}`}
         >
           {friendFirst ? t("✓ Mode ami activé : choisis ton défi ↓", "✓ Friend mode on: pick your challenge ↓") : t("Défier un ami", "Challenge a friend")}
         </button>
@@ -95,7 +95,7 @@ export function HubClient() {
               key={l}
               onClick={() => chooseLevel(l)}
               aria-pressed={level === l}
-              className={`min-h-8 rounded-[9px] px-1 text-[13px] font-semibold transition ${level === l ? "bg-card text-ink shadow-[0_3px_8px_rgba(0,0,0,0.12),0_3px_1px_rgba(0,0,0,0.04)]" : "text-ink/70"}`}
+              className={`min-h-8 rounded-[9px] px-1 text-[13px] font-semibold transition ${level === l ? "bg-card text-ink shadow-[0_3px_8px_rgba(0,0,0,0.12),0_3px_1px_rgba(0,0,0,0.04)] dark:bg-white/20" : "text-ink/70"}`}
             >
               {levelChoiceLabel(l, t)}
             </button>
@@ -109,7 +109,7 @@ export function HubClient() {
           .filter((card) => !friendFirst || card.modes.includes("friend"))
           .map((card) => (
             <li key={card.type}>
-              <button onClick={() => open(card)} className="flex w-full items-center gap-4 rounded-[22px] bg-card p-4 text-left shadow-sm transition active:scale-[0.99]">
+              <button onClick={() => open(card)} className="tile flex w-full items-center gap-4 rounded-[22px] p-4 text-left transition active:scale-[0.99]">
                 <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-accent-soft text-3xl" aria-hidden>
                   {card.emoji}
                 </span>
@@ -125,7 +125,7 @@ export function HubClient() {
           ))}
       </ul>
 
-      <Link href="/frise" className="flex items-center gap-4 rounded-[22px] bg-card p-4 transition active:scale-[0.99]">
+      <Link href="/frise" className="tile flex items-center gap-4 rounded-[22px] p-4 transition active:scale-[0.99]">
         <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-accent-soft text-3xl" aria-hidden>
           🕰️
         </span>
@@ -135,7 +135,7 @@ export function HubClient() {
         </span>
       </Link>
 
-      <Link href="/voter" className="flex items-center gap-4 rounded-[22px] bg-card p-4 transition active:scale-[0.99]">
+      <Link href="/voter" className="tile flex items-center gap-4 rounded-[22px] p-4 transition active:scale-[0.99]">
         <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-accent-soft text-3xl" aria-hidden>
           🗳️
         </span>

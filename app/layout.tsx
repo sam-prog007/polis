@@ -3,9 +3,11 @@ import { Suspense } from "react";
 import { BadgeToast } from "@/components/BadgeToast";
 import { Boot } from "@/components/Boot";
 import { BottomNav } from "@/components/BottomNav";
+import { FloatingChrome } from "@/components/FloatingChrome";
 import { Footer } from "@/components/Footer";
+import { GlassFilter } from "@/components/GlassFilter";
 import { LevelUp } from "@/components/LevelUp";
-import { TopBar } from "@/components/TopBar";
+import { THEME_SCRIPT } from "@/lib/theme-script";
 import "./globals.css";
 
 const description = "polis : comprends la présidentielle 2027 en 5 minutes, fais grandir ta ville et défie tes potes. Neutre, gratuit, sans inscription. Aussi en anglais.";
@@ -26,17 +28,23 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f6fa" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#05060d" },
   ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className="h-full antialiased">
+    // suppressHydrationWarning: the inline script below sets data-theme on <html> before React hydrates.
+    <html lang="fr" className="h-full antialiased" suppressHydrationWarning>
+      <head>
+        {/* Applies the saved theme (Automatique / Clair / Sombre) before the first paint, so the page never flashes. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col bg-paper text-ink">
-        <Suspense fallback={<div className="h-14" />}>
-          <TopBar />
+        <GlassFilter />
+        <Suspense fallback={null}>
+          <FloatingChrome />
         </Suspense>
         {children}
         <Suspense fallback={null}>

@@ -76,7 +76,7 @@ export function CreateMatchClient() {
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-2 font-semibold">{tr("Choisis le défi du match", "Pick the match challenge")}</legend>
           {defis.teamChallenges.map((t) => (
-            <label key={t} className={`flex min-h-12 items-center gap-3 rounded-2xl border-2 px-4 ${type === t ? "border-accent bg-accent-soft" : "border-transparent bg-card"}`}>
+            <label key={t} className={`flex min-h-12 items-center gap-3 rounded-2xl border-2 px-4 ${type === t ? "border-accent bg-accent-soft" : "border-line bg-card"}`}>
               <input type="radio" name="challenge" value={t} checked={type === t} onChange={() => setType(t)} className="h-5 w-5 accent-[var(--accent)]" />
               <span className="font-semibold">{defis.names[t]}</span>
             </label>

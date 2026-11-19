@@ -1,35 +1,51 @@
 @import "tailwindcss";
 
-/* Bleu, blanc, rouge: the national colours, in institutional tones (not a party's). White background and cards,
-   blue for actions, navy for the dark blocks, red as the accent on those blocks. Green/red stay for right/wrong answers. */
+/* Bleu, blanc, rouge: the national colours, in institutional tones (not a party's). Pure white background and
+   cards (cards get a hairline border), blue for actions, navy for big titles, red as a small accent (kickers, countdowns,
+   the tricolour hairline). Green/red stay for right/wrong answers.
+   Theme: "Automatique" follows the phone; the profile setting can force data-theme="light" or "dark" on <html>
+   (set before the first paint by the inline script in app/layout.tsx). */
 :root {
-  --paper: #f5f6fa;
+  --paper: #ffffff;
   --card: #ffffff;
   --ink: #161a33;
   --muted: #646b80;
-  --line: #e2e5ef;
+  --line: #e4e7f0;
   --fill: rgba(37, 70, 224, 0.07);
   --hero: #0b1f5c;
   --accent: #2546e0;
   --accent-ink: #ffffff;
-  --accent-soft: #e9eeff;
+  --accent-soft: #eef2ff;
   --rouge: #e1000f;
   --rouge-light: #ff6b72;
   --ok: #18753c;
   --ok-soft: #e6f4ea;
   --bad: #ce0500;
   --bad-soft: #ffe9e9;
+  --shadow: 0 1px 2px rgba(22, 26, 51, 0.04), 0 6px 20px rgba(22, 26, 51, 0.05);
+  /* Liquid glass (tab bar, avatar, back button) */
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-solid: #ffffff;
+  --glass-edge: rgba(255, 255, 255, 0.75);
+  --glass-shadow: 0 10px 30px rgba(22, 26, 51, 0.14), 0 1px 3px rgba(22, 26, 51, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
+  --lens: rgba(37, 70, 224, 0.1);
+  /* Room left for the floating chrome */
+  --top-space: calc(env(safe-area-inset-top, 0px) + 4.25rem);
+  --nav-space: calc(env(safe-area-inset-bottom, 0px) + 5.75rem);
+  color-scheme: light;
 }
 
+/* Dark values: once for "Automatique" on a phone in dark mode, once for the forced "Sombre" setting. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #05060d;
-    --card: #141829;
+    --card: #12162a;
     --ink: #f3f4fa;
     --muted: #9aa0b5;
-    --line: #2b3047;
+    --line: #262b42;
     --fill: rgba(110, 139, 255, 0.14);
-    --hero: #0f2470;
+    --hero: #dfe5ff;
     --accent: #7d97ff;
     --accent-ink: #0a0f2e;
     --accent-soft: #1a2456;
@@ -39,7 +55,52 @@
     --ok-soft: #0f2e18;
     --bad: #ff453a;
     --bad-soft: #3a1412;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --glass: rgba(30, 34, 56, 0.55);
+    --glass-solid: #1b2036;
+    --glass-edge: rgba(255, 255, 255, 0.14);
+    --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+    --glass-highlight: rgba(255, 255, 255, 0.16);
+    --lens: rgba(125, 151, 255, 0.2);
     color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #05060d;
+  --card: #12162a;
+  --ink: #f3f4fa;
+  --muted: #9aa0b5;
+  --line: #262b42;
+  --fill: rgba(110, 139, 255, 0.14);
+  --hero: #dfe5ff;
+  --accent: #7d97ff;
+  --accent-ink: #0a0f2e;
+  --accent-soft: #1a2456;
+  --rouge: #ff4d57;
+  --rouge-light: #ff8a90;
+  --ok: #30d158;
+  --ok-soft: #0f2e18;
+  --bad: #ff453a;
+  --bad-soft: #3a1412;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --glass: rgba(30, 34, 56, 0.55);
+  --glass-solid: #1b2036;
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --glass-highlight: rgba(255, 255, 255, 0.16);
+  --lens: rgba(125, 151, 255, 0.2);
+  color-scheme: dark;
+}
+
+/* Tailwind's dark: variant follows the same rule as the tokens (phone setting, unless the profile forces a theme). */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-theme="dark"] *) {
+    @slot;
   }
 }
 
@@ -226,13 +287,109 @@ h3 {
   animation: fadeIn 0.2s ease-out both;
 }
 
-/* Tricolore: on the navy blocks, the accent turns red (countdowns, kickers, buttons), so blue + white + red read as one. */
-.bg-hero .text-accent {
-  color: var(--rouge-light);
+/* Shared component classes. In the components layer, so Tailwind utilities (fixed, rounded-*, p-*…) still win. */
+@layer components {
+  /* Cards: white with a hairline border and a very light shadow (the page is white too). */
+  .tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  /* Hero card: replaces the old navy blocks. White card, tricolour hairline on top, navy title (text-hero), red kicker. */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0 33.4%, transparent 33.4% 66.6%, var(--rouge) 66.6%);
+    pointer-events: none;
+  }
+  .tricolour {
+    background: linear-gradient(90deg, var(--accent) 0 33.4%, var(--card) 33.4% 66.6%, var(--rouge) 66.6%);
+  }
+  .kicker {
+    color: var(--rouge);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Liquid glass: translucent, blurred and saturated, with a light inner edge, a soft shadow and a top highlight.
+     Chromium also gets a slight SVG refraction (class glass-refract on <html>, set by components/GlassFilter.tsx). */
+  .glass {
+    position: relative;
+    isolation: isolate;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+      inset 0 0 0 1px var(--glass-edge),
+      var(--glass-shadow);
+  }
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(180deg, var(--glass-highlight), transparent 55%);
+    pointer-events: none;
+  }
+  .glass-refract .glass {
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: url(#polis-glass) blur(20px) saturate(180%);
+  }
+  /* The tab that is open sits in a glass lens that slides between tabs with a little spring. */
+  .glass-lens {
+    background: var(--lens);
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      inset 0 0 0 1px var(--glass-edge),
+      0 2px 10px rgba(22, 26, 51, 0.1);
+    transition: opacity 0.2s ease-out;
+  }
+  .glass-lens-track {
+    transition: transform 0.45s cubic-bezier(0.34, 1.45, 0.55, 1);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass,
+    .glass-refract .glass {
+      background: var(--glass-solid);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
 }
-.bg-hero .bg-accent {
-  background-color: var(--rouge);
-  color: #ffffff;
+
+@keyframes bubble {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.8);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.bubble {
+  animation: bubble 1.5s ease-out both;
 }
 
 /* Timeline: items fade up as they scroll into view */

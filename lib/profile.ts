@@ -21,6 +21,8 @@ export type Profile = {
   interests: string[]; // topic ids
   /** 0 = gauche … 10 = droite. Stays on this device only: never sent to the server, never in events. */
   position: number | null;
+  /** Avatar: a city building id (content/city.json), or null for the first letter of the name. No photos. */
+  avatar: string | null;
 };
 
 export const EMPTY_PROFILE: Profile = {
@@ -35,6 +37,7 @@ export const EMPTY_PROFILE: Profile = {
   level: "debutant",
   interests: [],
   position: null,
+  avatar: null,
 };
 
 const store = createPersistedStore<Profile>("p27.profile", EMPTY_PROFILE);

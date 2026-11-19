@@ -56,19 +56,19 @@ function Landing() {
   ];
 
   return (
-    <Page className="!gap-6 !pt-4">
-      <section className="relative overflow-hidden rounded-[2rem] bg-hero p-6 pb-0 text-white shadow-lg">
-        <Logo onDark className="mb-5 h-10" />
+    <Page className="!gap-6" home>
+      <HomeTop />
+      <section className="hero rounded-[2rem] p-6 pb-0">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-accent px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-accent-ink">{days === null ? "J-…" : t(`J-${days}`, `D-${days}`)}</span>
-          <span className="text-sm font-semibold opacity-80">{t("avant le 1er tour, le 18 avril 2027", "until the 1st round, 18 April 2027")}</span>
+          <span className="rounded-full bg-rouge px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-white">{days === null ? "J-…" : t(`J-${days}`, `D-${days}`)}</span>
+          <span className="text-sm font-semibold text-muted">{t("avant le 1er tour, le 18 avril 2027", "until the 1st round, 18 April 2027")}</span>
         </div>
-        <h1 className="mt-4 font-display text-[2.6rem] font-extrabold leading-[1] tracking-tight">
+        <h1 className="mt-4 font-display text-[2.6rem] font-extrabold leading-[1] tracking-tight text-hero">
           {t("La présidentielle,", "The French election,")}
           <br />
           <span className="text-accent">{t("en 5 minutes.", "in 5 minutes.")}</span>
         </h1>
-        <p className="mt-3 max-w-[22rem] text-[17px] leading-snug opacity-90">
+        <p className="mt-3 max-w-[22rem] text-[17px] leading-snug text-muted">
           {t("Comprends la campagne, fais grandir ta ville et défie tes potes.", "Understand the campaign, grow your city and challenge your friends.")}
         </p>
         <div className="-mx-6 mt-5">
@@ -88,7 +88,7 @@ function Landing() {
 
       <ul className="grid gap-3">
         {features.map((f) => (
-          <li key={f.emoji} className="flex items-start gap-4 rounded-[22px] bg-card p-4">
+          <li key={f.emoji} className="tile flex items-start gap-4 rounded-[22px] p-4">
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-accent-soft text-2xl" aria-hidden>
               {f.emoji}
             </span>
@@ -125,14 +125,15 @@ function PlayerHome({ days }: { days: number | null }) {
   ];
 
   return (
-    <Page className="!pt-4">
-      <section className="relative overflow-hidden rounded-[2rem] bg-hero p-5 pb-0 text-white shadow-lg">
-        <p className="text-sm font-semibold opacity-80">{t("Re-bonjour", "Welcome back")} 👋</p>
-        <h1 className="font-display text-3xl font-extrabold leading-tight">{profile.firstName || t("Content de te revoir", "Good to see you")}</h1>
+    <Page home>
+      <HomeTop />
+      <section className="hero rounded-[2rem] p-5 pb-0">
+        <p className="text-sm font-semibold text-muted">{t("Re-bonjour", "Welcome back")} 👋</p>
+        <h1 className="font-display text-3xl font-extrabold leading-tight text-hero">{profile.firstName || t("Content de te revoir", "Good to see you")}</h1>
         <div className="mt-3 flex flex-wrap gap-2 text-xs font-extrabold">
-          <span className="rounded-full bg-accent px-3 py-1 uppercase tracking-wider text-accent-ink">{days === null ? "J-…" : t(`J-${days}`, `D-${days}`)} {t("avant le 1er tour", "to the 1st round")}</span>
-          {streak > 0 && <span className="rounded-full bg-white/15 px-3 py-1">🔥 {daysLabel(streak, t)}</span>}
-          <span className="rounded-full bg-white/15 px-3 py-1">
+          <span className="rounded-full bg-rouge px-3 py-1 uppercase tracking-wider text-white">{days === null ? "J-…" : t(`J-${days}`, `D-${days}`)} {t("avant le 1er tour", "to the 1st round")}</span>
+          {streak > 0 && <span className="rounded-full bg-fill px-3 py-1">🔥 {daysLabel(streak, t)}</span>}
+          <span className="rounded-full bg-accent-soft px-3 py-1 text-accent">
             🏘️ {level.name} · {total} voix
           </span>
         </div>
@@ -157,7 +158,7 @@ function PlayerHome({ days }: { days: number | null }) {
 
       <nav className="grid grid-cols-2 gap-3" aria-label={t("Rubriques", "Sections")}>
         {shortcuts.map((s) => (
-          <Link key={s.href} href={s.href} className="flex flex-col gap-1 rounded-[22px] bg-card p-4 transition active:scale-[0.98]">
+          <Link key={s.href} href={s.href} className="tile flex flex-col gap-1 rounded-[22px] p-4 transition active:scale-[0.98]">
             <span className="text-3xl" aria-hidden>
               {s.emoji}
             </span>
@@ -169,6 +170,20 @@ function PlayerHome({ days }: { days: number | null }) {
 
       <p className="text-center text-sm font-semibold text-muted">{t("Neutre et gratuit. On ne te dira jamais pour qui voter.", "Neutral and free. We will never tell you who to vote for.")}</p>
     </Page>
+  );
+}
+
+/** Home page only: the tricolour hairline at the very top, and the logo on the same line as the floating avatar. */
+function HomeTop() {
+  const t = useT();
+  return (
+    <>
+      <div className="tricolour fixed inset-x-0 top-0 z-40 h-[3px]" aria-hidden />
+      <div className="flex h-11 items-center gap-2 pr-14">
+        <Logo className="h-8" />
+        <span className="truncate text-xs font-semibold text-muted">{t("Présidentielle 2027", "French election 2027")}</span>
+      </div>
+    </>
   );
 }
 
@@ -201,27 +216,28 @@ function FriendLanding({ code }: { code: string }) {
   const who = loaded?.firstName || t("Un·e ami·e", "A friend");
 
   return (
-    <Page>
-      <section className="rounded-[2rem] bg-hero p-6 text-white shadow-lg">
-        <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Défi reçu", "Challenge received")} ⚡</p>
+    <Page home>
+      <HomeTop />
+      <section className="hero rounded-[2rem] p-6">
+        <p className="kicker">{t("Défi reçu", "Challenge received")} ⚡</p>
         {ref === null ? (
-          <p className="mt-2 font-display text-2xl font-bold">{t("Chargement du défi…", "Loading the challenge…")}</p>
+          <p className="mt-2 font-display text-2xl font-bold text-hero">{t("Chargement du défi…", "Loading the challenge…")}</p>
         ) : loaded ? (
-          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight">
+          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight text-hero">
             {loaded.score === null
               ? t(`${who} t'a défié·e au défi « ${challengeName} ».`, `${who} challenged you on "${challengeName}".`)
               : t(`${who} t'a défié·e : ${loaded.score}/${loaded.total} au défi « ${challengeName} ».`, `${who} challenged you: ${loaded.score}/${loaded.total} on "${challengeName}".`)}
           </h1>
         ) : (
           <>
-            <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight">{t("Ce défi n'existe plus", "This challenge no longer exists")}</h1>
-            <p className="mt-2 text-[15px] opacity-90">
+            <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight text-hero">{t("Ce défi n'existe plus", "This challenge no longer exists")}</h1>
+            <p className="mt-2 text-[15px] text-muted">
               {t("Il a peut-être été supprimé par la personne qui l'a créé. Choisis un défi et joue quand même !", "Its creator may have deleted it. Pick a challenge and play anyway!")}
             </p>
           </>
         )}
         {ref !== "missing" && (
-          <ol className="mt-3 flex flex-col gap-1 text-[15px] opacity-90">
+          <ol className="mt-3 flex flex-col gap-1 text-[15px] text-muted">
             <li>1. {t("Tu joues les mêmes questions que ton ami.", "You play the same questions as your friend.")}</li>
             <li>2. {t("Après chaque réponse, on t'explique la bonne réponse.", "After each answer, we explain the right one.")}</li>
             <li>3. {t("À la fin, vous comparez vos scores.", "At the end, you compare scores.")}</li>

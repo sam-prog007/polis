@@ -113,9 +113,9 @@ export function ResultClient() {
         </ButtonLink>
       )}
 
-      {result.type === "autre-camp" && <p className="rounded-2xl bg-card px-4 py-3 font-semibold">{c.autreCamp.resultMessage}</p>}
+      {result.type === "autre-camp" && <p className="tile rounded-2xl px-4 py-3 font-semibold">{c.autreCamp.resultMessage}</p>}
 
-      <details className="group rounded-[22px] bg-card">
+      <details className="group tile rounded-[22px]">
         <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between px-5 font-semibold">
           {isProno ? t(`Revoir mes ${result.items.length} pronos`, `See my ${result.items.length} predictions`) : t(`Voir la correction (${result.items.length} questions)`, `See the answers (${result.items.length} questions)`)}
           <span className="text-accent transition group-open:rotate-180" aria-hidden>

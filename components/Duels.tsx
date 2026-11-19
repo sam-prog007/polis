@@ -62,7 +62,7 @@ export function Duels() {
       </h2>
       <ul className="flex flex-col gap-3">
         {duels.map((d) => (
-          <li key={d.code} className="flex flex-col gap-3 rounded-[22px] bg-card p-4">
+          <li key={d.code} className="flex flex-col gap-3 tile rounded-[22px] p-4">
             <div className="flex items-baseline justify-between gap-3">
               <span className="font-semibold">
                 {typeEmoji(c, d.challengeType)} {c.defis.names[d.challengeType]}

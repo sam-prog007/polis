@@ -73,7 +73,7 @@ export function VoterClient() {
   return (
     <Page>
       <div>
-        <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Guide", "Guide")}</p>
+        <p className="kicker">{t("Guide", "Guide")}</p>
         <h1 className="font-display text-4xl font-extrabold leading-none">{t("Voter : mode d'emploi", "Voting: how it works")}</h1>
         <p className="mt-2 text-muted">{t("Les démarches selon ta situation, avec les sources officielles.", "The steps for your situation, with official sources.")}</p>
       </div>
@@ -86,7 +86,7 @@ export function VoterClient() {
               key={p.id}
               onClick={() => choose(p.id)}
               aria-pressed={p.id === current.id}
-              className={`flex min-h-14 items-center gap-2 rounded-2xl border-2 px-3 py-2 text-left text-[15px] font-semibold leading-tight transition active:scale-[0.98] ${p.id === current.id ? "border-accent bg-accent-soft" : "border-transparent bg-card"}`}
+              className={`flex min-h-14 items-center gap-2 rounded-2xl border-2 px-3 py-2 text-left text-[15px] font-semibold leading-tight transition active:scale-[0.98] ${p.id === current.id ? "border-accent bg-accent-soft" : "border-line bg-card"}`}
             >
               <span className="text-xl" aria-hidden>
                 {p.emoji}
@@ -97,16 +97,16 @@ export function VoterClient() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3 rounded-[2rem] bg-hero p-5 text-white">
-        <p className="font-display text-2xl font-extrabold leading-tight">
+      <section className="hero flex flex-col gap-3 rounded-[2rem] p-5">
+        <p className="font-display text-2xl font-extrabold leading-tight text-hero">
           {current.canVote ? t("✓ Tu peux voter à la présidentielle", "✓ You can vote in the presidential election") : t("Tu ne votes pas à la présidentielle", "You don't vote in the presidential election")}
         </p>
-        <p className="text-[15px] leading-snug opacity-90">{current.summary}</p>
+        <p className="text-[15px] leading-snug text-muted">{current.summary}</p>
         {deadlines.length > 0 && (
           <ul className="flex flex-col gap-2">
             {deadlines.map((d) => (
-              <li key={d.id} className="flex items-center gap-3 rounded-2xl bg-white/10 px-3 py-2">
-                <span className="shrink-0 rounded-full bg-accent px-2.5 py-0.5 text-xs font-extrabold text-accent-ink">{mounted ? t(`J-${daysUntil(d.date)}`, `D-${daysUntil(d.date)}`) : "J-…"}</span>
+              <li key={d.id} className="flex items-center gap-3 rounded-2xl bg-fill px-3 py-2">
+                <span className="shrink-0 rounded-full bg-rouge px-2.5 py-0.5 text-xs font-extrabold text-white">{mounted ? t(`J-${daysUntil(d.date)}`, `D-${daysUntil(d.date)}`) : "J-…"}</span>
                 <span className="text-sm leading-snug">
                   <strong>{d.label}</strong> · {dateLabel(d.date)}
                 </span>
@@ -115,7 +115,7 @@ export function VoterClient() {
           </ul>
         )}
         {mounted && deadlines.length > 0 && (
-          <button onClick={addToCalendar} className="min-h-11 rounded-[14px] bg-white/15 px-4 text-[15px] font-semibold transition active:opacity-70">
+          <button onClick={addToCalendar} className="min-h-11 rounded-[14px] bg-fill px-4 text-[15px] font-semibold text-accent transition active:opacity-70">
             📅 {t("Ajouter ces dates à mon agenda (avec rappel)", "Add these dates to my calendar (with a reminder)")}
           </button>
         )}
@@ -124,7 +124,7 @@ export function VoterClient() {
             <p className="text-sm font-semibold">
               {t(`Ta checklist : ${doneCount}/${steps.length} étapes`, `Your checklist: ${doneCount}/${steps.length} steps`)}
             </p>
-            <div className="h-2 overflow-hidden rounded-full bg-white/15" aria-hidden>
+            <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden>
               <div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${(doneCount / steps.length) * 100}%` }} />
             </div>
           </div>

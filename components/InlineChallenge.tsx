@@ -104,17 +104,17 @@ export function InlineChallenge({ readCards, used, onContinue }: { readCards: Fe
       `I scored ${done.score}/${items.length} on the quick challenge about the 2027 French presidential election. Can you beat me? 👉 ${url}`,
     );
     return (
-      <div className="pop flex flex-col gap-4 rounded-[2rem] bg-hero p-6 text-white shadow-lg">
-        <p className="text-sm font-bold uppercase tracking-wider text-accent">{t("Défi rapide terminé", "Quick challenge done")}</p>
-        <p className="font-display text-6xl font-extrabold tabular-nums">
+      <div className="hero pop flex flex-col gap-4 rounded-[2rem] p-6">
+        <p className="kicker">{t("Défi rapide terminé", "Quick challenge done")}</p>
+        <p className="font-display text-6xl font-extrabold tabular-nums text-hero">
           {done.score}/{items.length}
         </p>
         <p className="font-display text-lg font-bold leading-snug">{c.resultLine(done.score, items.length, done.code.charCodeAt(0))}</p>
-        <ScoreRewards before={done.before} gained={done.gained} onDark />
+        <ScoreRewards before={done.before} gained={done.gained} bare />
         <Button onClick={() => setSharing(true)}>
           👫 {t("Défie un·e ami·e", "Challenge a friend")} (+{VOIX.share} voix)
         </Button>
-        <button onClick={onContinue} className="min-h-11 font-semibold underline underline-offset-4 opacity-90">
+        <button onClick={onContinue} className="min-h-11 font-semibold text-accent underline underline-offset-4">
           {t("Continuer à lire ↓", "Keep reading ↓")}
         </button>
         <ShareSheet open={sharing} onClose={() => setSharing(false)} message={message} url={url} challengeType="quiz" code={done.code} />
@@ -144,7 +144,7 @@ export function InlineChallenge({ readCards, used, onContinue }: { readCards: Fe
       <h2 className="font-display text-[22px] font-bold leading-snug">{item.question}</h2>
       <div className="flex flex-col gap-2">
         {item.options.map((o, i) => {
-          const state = !answered ? "border-transparent bg-card" : i === item.answer ? "border-ok bg-ok-soft" : i === picked ? "border-bad bg-bad-soft" : "border-line opacity-60";
+          const state = !answered ? "border-line bg-card" : i === item.answer ? "border-ok bg-ok-soft" : i === picked ? "border-bad bg-bad-soft" : "border-line opacity-60";
           return (
             <button key={o} onClick={() => pick(i)} disabled={answered} className={`min-h-12 rounded-2xl border-2 px-4 py-2.5 text-left font-medium transition ${state}`}>
               {o}
