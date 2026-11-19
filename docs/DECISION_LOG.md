@@ -75,7 +75,7 @@ _None yet._
 | Fixed Glucksmann source (Public Sénat, 11 Oct) and Tondelier wording (members vote 10–13 Dec) | Found by verification |
 
 ## 2026-10-20: deployed
-- Public app: https://polis-2027.vercel.app (Vercel, production)
+- Public app: https://polis-seven.vercel.app (Vercel, production)
 - Database: Supabase project zsqnhpvkbykyxxpfvpyc (West EU), schema from `supabase/schema.sql`, RLS on, no anon policy
 - Env vars set on Vercel (production) and in `presidentielle-2027/.env.local` (git-ignored). Stats page: /stats (password shared with the team only)
 - End-to-end test passed (challenge → friend reply → +50 bonus, team match, events, stats); test rows deleted
@@ -274,4 +274,4 @@ The course grades commitments by level (deck slides 40–42), each with a trace 
 | Never use `?t=` for a public channel | `t` identifies one tester: a whole channel would count as one person, and it resets local data |
 | `/stats` → "D'où viennent les joueurs ?": per source, people, how many are testers, finished a challenge, left an email, shared | Report Instagram as a separate channel in the evidence log; the Test Card metric stays on in-person testers (`?t=`) |
 | Privacy page mentions the source | Transparency |
-- Link for the Instagram bio: `https://polis-2027.vercel.app/?src=instagram`
+- Link for the Instagram bio: `https://polis-seven.vercel.app/?src=instagram`

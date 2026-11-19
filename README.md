@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://polis-2027.vercel.app"><b>▶ Play: polis-2027.vercel.app</b></a>
+  <a href="https://polis-seven.vercel.app"><b>▶ Play: polis-seven.vercel.app</b></a>
   &nbsp;·&nbsp;
   <a href="polis-demo-105bpm.mp4">Demo video</a>
   &nbsp;·&nbsp;
@@ -57,7 +57,7 @@ Without Supabase the app still runs: you can read the feed, play every solo chal
 
 | Variable | What |
 |---|---|
-| `NEXT_PUBLIC_SITE_URL` | Public URL of the site, used in challenge links (e.g. `https://polis-2027.vercel.app`). Baked in at build time: redeploy after changing it. |
+| `NEXT_PUBLIC_SITE_URL` | Public URL of the site, used in challenge links (e.g. `https://polis-seven.vercel.app`). Baked in at build time: redeploy after changing it. |
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service key (server only, never commit it) |
 | `STATS_PASSWORD` | Password for the `/stats` page |
@@ -72,7 +72,7 @@ Row Level Security is on for every table, with no policy. The browser never talk
 
 ## Deploy
 
-The repository is connected to Vercel: **every push to `main` redeploys <https://polis-2027.vercel.app>** (about 1 minute).
+The repository is connected to Vercel: **every push to `main` redeploys <https://polis-seven.vercel.app>** (about 1 minute).
 
 - Run `npm run build` before pushing. If the build fails locally, the deploy fails too and the live site keeps the previous version.
 - To try a change without touching the live site, push to another branch: Vercel creates a separate preview link.
@@ -112,7 +112,7 @@ Every question has a `difficulty` from 1 (easy) to 3 (hard). Sources and fact-ch
 
 - `/stats` (password = `STATS_PASSWORD`) shows every metric, with a CSV export of sessions.
 - `?t=T03` on a link tags the session for an in-person test.
-- `?src=instagram` (or `qr`, `whatsapp`…) records where people came from, e.g. `https://polis-2027.vercel.app/?src=instagram` for the Instagram bio. Never use `?t=` on a public channel.
+- `?src=instagram` (or `qr`, `whatsapp`…) records where people came from, e.g. `https://polis-seven.vercel.app/?src=instagram` for the Instagram bio. Never use `?t=` on a public channel.
 
 | Metric | How it is computed |
 |---|---|
