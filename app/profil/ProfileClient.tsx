@@ -6,7 +6,7 @@ import { InstagramGlyph } from "@/components/CommitPrompts";
 import { AVATARS, AvatarFace } from "@/components/Avatar";
 import { Settings } from "@/components/Settings";
 import { Trophies } from "@/components/Trophies";
-import { Button, ButtonLink, Card, Page } from "@/components/ui";
+import { ButtonLink, Card, Page } from "@/components/ui";
 import { useContent, useT } from "@/lib/i18n";
 import { levelIndexFor } from "@/lib/levels";
 import { isInternational, saveProfile, useProfile, type Profile } from "@/lib/profile";
@@ -122,36 +122,6 @@ export function ProfileClient() {
               </a>
             )}
           </>
-        )}
-      </Card>
-
-      {/* Political position: optional, moved out of onboarding, stays on this phone only */}
-      <Card className="flex flex-col gap-3">
-        <h2 className="font-display text-lg font-bold">{ob.ideas.question}</h2>
-        <p className="text-sm text-muted">🔒 {ob.ideas.privacy}</p>
-        <label htmlFor="pf-position" className="sr-only">
-          {t("Ta position, de 0 (gauche) à 10 (droite)", "Your position, from 0 (left) to 10 (right)")}
-        </label>
-        <input
-          id="pf-position"
-          type="range"
-          min={0}
-          max={10}
-          step={1}
-          value={p.position ?? 5}
-          onChange={(e) => update({ position: Number(e.target.value) })}
-          className={`w-full accent-[var(--accent)] ${p.position === null ? "opacity-40" : ""}`}
-        />
-        <div className="flex justify-between text-sm font-semibold text-muted">
-          <span>{t("Gauche", "Left")}</span>
-          <span>{t("Centre", "Centre")}</span>
-          <span>{t("Droite", "Right")}</span>
-        </div>
-        <p className="text-sm">{p.position === null ? t("Non renseignée : ton fil alterne tous les bords.", "Not set: your feed alternates every side.") : `${p.position}/10`}</p>
-        {p.position !== null && (
-          <Button variant="secondary" onClick={() => update({ position: null })}>
-            {t("Effacer ma position", "Clear my position")}
-          </Button>
         )}
       </Card>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import onboarding from "@/content/onboarding.json";
-import { writeJSON } from "./storage";
+import { readJSON, writeJSON } from "./storage";
 import { createPersistedStore } from "./store";
 
 export type LevelId = "debutant" | "intermediaire" | "avance";
@@ -19,8 +19,6 @@ export type Profile = {
   knowledge: number; // 0-3 right answers to the level test
   level: LevelId;
   interests: string[]; // topic ids
-  /** 0 = gauche … 10 = droite. Stays on this device only: never sent to the server, never in events. */
-  position: number | null;
   /** Avatar: a city building id (content/city.json), or null for the first letter of the name. No photos. */
   avatar: string | null;
 };
@@ -36,9 +34,22 @@ export const EMPTY_PROFILE: Profile = {
   knowledge: 0,
   level: "debutant",
   interests: [],
-  position: null,
   avatar: null,
 };
+
+/**
+ * The left–right slider was removed (decision D2): the feed learns from topics only. Phones that still hold
+ * a stored position get it deleted the first time this module loads, before anything reads the profile.
+ */
+function dropStoredPosition() {
+  if (typeof window === "undefined") return;
+  const saved = readJSON<Record<string, unknown> | null>("p27.profile", null);
+  if (saved && "position" in saved) {
+    delete saved.position;
+    writeJSON("p27.profile", saved);
+  }
+}
+dropStoredPosition();
 
 const store = createPersistedStore<Profile>("p27.profile", EMPTY_PROFILE);
 

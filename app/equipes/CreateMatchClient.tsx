@@ -106,7 +106,7 @@ function TeamLink({ label, url, challenge }: { label: string; url: string; chall
   return (
     <Card className="flex flex-col gap-3">
       <p className="font-display text-lg font-bold">{tr("Lien de l'équipe", "Link for team")} {label}</p>
-      <p className="break-all rounded-xl bg-paper p-3 font-mono text-sm">{url}</p>
+      <p className="break-all rounded-xl bg-fill p-3 font-mono text-sm">{url}</p>
       <div className="grid grid-cols-2 gap-2">
         <a href={`https://wa.me/?text=${encodeURIComponent(message)}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-accent px-3 font-semibold text-accent-ink">
           WhatsApp

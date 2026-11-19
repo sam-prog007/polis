@@ -16,72 +16,118 @@ export function buildPool(p: Profile, c: Content): FeedCard[] {
   return [...bases, ...c.newsCards];
 }
 
-/** Order of camps to visit: the ones farthest from the player's own position first ("autre point de vue"). */
-export function campRotation(position: number | null): BlocCamp[] {
-  if (position === null) return [...BLOCS];
-  const me = (position / 10) * (BLOCS.length - 1);
-  return [...BLOCS].sort((a, b) => Math.abs(BLOCS.indexOf(b) - me) - Math.abs(BLOCS.indexOf(a) - me));
+/** Learned interest per topic id. Kept on the phone only (lib/topicScores.ts); never about a camp. */
+export type TopicScores = Record<string, number>;
+
+/** Swipe right / left and opening a card's details move the card's topic score by these amounts. */
+export const SCORE = { up: 1, down: -1, details: 0.5, interest: 2 } as const;
+
+/** Topics chosen at onboarding start at +2; the swipes add to that. */
+export function effectiveScores(learned: TopicScores, interests: string[]): TopicScores {
+  const out: TopicScores = { ...learned };
+  for (const id of interests) out[id] = (out[id] ?? 0) + SCORE.interest;
+  return out;
 }
 
-function byInterestThenDate(interests: string[]) {
-  return (a: FeedCard, b: FeedCard) => {
-    const ia = interests.includes(a.topic) ? 0 : 1;
-    const ib = interests.includes(b.topic) ? 0 : 1;
-    if (ia !== ib) return ia - ib;
-    return (b.date ?? "").localeCompare(a.date ?? "");
-  };
+/** How likely a topic is to come up next: 1 at score 0, more with likes, never 0 (every topic can still appear). */
+export function topicWeight(score: number): number {
+  return Math.min(10, Math.max(0.2, 1 + score / 2));
 }
 
-export type RuleContext = { likes: Partial<Record<BlocCamp, number>>; interests: string[]; position: number | null };
+/** The best-liked topics, highest score first (ties keep the given order). */
+export function topTopics(scores: TopicScores, among: string[], n = 3): string[] {
+  return [...among].sort((a, b) => (scores[b] ?? 0) - (scores[a] ?? 0)).slice(0, n);
+}
+
+export type RuleContext = {
+  /** Effective topic scores (effectiveScores). */
+  scores: TopicScores;
+  /** Random number in [0, 1). Seeded in the app, so the same phone gets the same order. */
+  random: () => number;
+};
+
+const isNeutral = (c: FeedCard) => c.kind === "bases" || c.camp === "neutre";
+const newestFirst = (a: FeedCard, b: FeedCard) => (b.date ?? "").localeCompare(a.date ?? "");
+
+function weightedPick<T>(items: T[], weight: (x: T) => number, random: () => number): T {
+  const total = items.reduce((s, x) => s + weight(x), 0);
+  let r = random() * total;
+  for (const x of items) {
+    r -= weight(x);
+    if (r < 0) return x;
+  }
+  return items[items.length - 1];
+}
 
 /**
- * "Autre point de vue" rule, no machine learning:
- * - basics first (beginners), then a neutral card after every 2 camp cards while neutral cards remain
- * - camps take turns, starting with the camps farthest from the player's own position (if given, kept on device)
- * - if the player liked one camp more, the next camp card comes from the camp with the fewest likes
- * - never more than 2 cards in a row from the same camp (unless only that camp is left)
- * - inside a camp: the player's topics first, then the most recent
+ * Next card of the feed. Preferences are learned per TOPIC, never per camp (decision D2):
+ *
+ * 1. Topic: picked at random, weighted by its score, so liked topics come up more often. Guard rails:
+ *    never more than 3 cards in a row on the same topic, and at least 1 card in 4 from outside the top 3 topics.
+ * 2. Neutral or camp: a neutral card (the basics first) after every 2 or 3 camp cards, never 2 neutrals
+ *    in a row while camp cards remain.
+ * 3. Camp, inside that topic: the camp shown least on that topic so far; ties go to the camp shown least
+ *    overall. Never the same camp twice in a row when there is a choice.
+ * 4. If the topic has no card left from that camp, that camp's card comes from the best-liked other topic,
+ *    so the camps stay balanced over the session whatever the player likes.
+ *
+ * Inside a topic and camp: the most recent card first. Beginners start with the basics.
  */
 export function pickNext(pool: FeedCard[], order: string[], ctx: RuleContext): FeedCard | null {
-  const shown = order.map((id) => pool.find((c) => c.id === id)).filter((c): c is FeedCard => !!c);
-  const remaining = pool.filter((c) => !order.includes(c.id));
+  const byId = new Map(pool.map((c) => [c.id, c]));
+  const shown = order.map((id) => byId.get(id)).filter((c): c is FeedCard => !!c);
+  const done = new Set(order);
+  const remaining = pool.filter((c) => !done.has(c.id));
   if (!remaining.length) return null;
-  const sort = byInterestThenDate(ctx.interests);
 
   const bases = remaining.filter((c) => c.kind === "bases");
   if (!shown.length && bases.length) return bases[0];
-  const neutrals = [...bases, ...remaining.filter((c) => c.kind === "actu" && c.camp === "neutre").sort(sort)];
-  const campCards = remaining.filter((c) => c.camp !== "neutre");
-  if (!campCards.length) return neutrals[0] ?? null;
 
-  const tail = shown.slice(-2);
-  if (tail.length === 2 && tail.every((c) => c.camp !== "neutre") && neutrals.length) return neutrals[0];
+  const weight = (t: string) => topicWeight(ctx.scores[t] ?? 0);
 
-  const lastCamp = [...shown].reverse().find((c) => c.camp !== "neutre")?.camp as BlocCamp | undefined;
-  const blocked = tail.length === 2 && tail[0].camp === tail[1].camp && tail[0].camp !== "neutre" ? (tail[0].camp as BlocCamp) : null;
-  const available = BLOCS.filter((b) => campCards.some((c) => c.camp === b));
-  let candidates = available.filter((b) => b !== blocked);
-  if (!candidates.length) candidates = available;
-
-  const likeValues = candidates.map((b) => ctx.likes[b] ?? 0);
-  if (likeValues.some((v) => v > 0) && new Set(likeValues).size > 1) {
-    const min = Math.min(...likeValues);
-    candidates = candidates.filter((b) => (ctx.likes[b] ?? 0) === min);
+  // 1. Topic
+  const topics = [...new Set(remaining.map((c) => c.topic))];
+  const top3 = topTopics(ctx.scores, topics);
+  const last3 = shown.slice(-3);
+  let allowed = topics;
+  if (last3.length === 3 && last3.every((c) => c.topic === last3[0].topic)) allowed = allowed.filter((t) => t !== last3[0].topic);
+  if (last3.length === 3 && last3.every((c) => top3.includes(c.topic))) {
+    const outside = allowed.filter((t) => !top3.includes(t));
+    if (outside.length) allowed = outside;
   }
-  const different = candidates.filter((b) => b !== lastCamp);
-  if (different.length) candidates = different;
+  if (!allowed.length) allowed = topics;
+  const topic = weightedPick(allowed, weight, ctx.random);
 
-  const rotation = campRotation(ctx.position);
-  const start = lastCamp ? rotation.indexOf(lastCamp) + 1 : 0;
-  let camp: BlocCamp = candidates[0];
-  for (let i = 0; i < rotation.length; i++) {
-    const c = rotation[(start + i) % rotation.length];
-    if (candidates.includes(c)) {
-      camp = c;
-      break;
-    }
+  // 2. Neutral or camp
+  const neutrals = remaining.filter(isNeutral);
+  const campCards = remaining.filter((c) => !isNeutral(c));
+  let run = 0;
+  for (let i = shown.length - 1; i >= 0 && !isNeutral(shown[i]); i--) run++;
+  const lastWasNeutral = shown.length > 0 && isNeutral(shown[shown.length - 1]);
+  const neutralSlot =
+    !campCards.length || (neutrals.length > 0 && !lastWasNeutral && (run >= 3 || (run >= 2 && neutrals.some((c) => c.topic === topic))));
+
+  if (neutralSlot) {
+    if (bases.length) return bases[0];
+    const here = neutrals.filter((c) => c.topic === topic).sort(newestFirst);
+    if (here.length) return here[0];
+    return [...neutrals].sort((a, b) => weight(b.topic) - weight(a.topic) || newestFirst(a, b))[0];
   }
-  return campCards.filter((c) => c.camp === camp).sort(sort)[0];
+
+  // 3. Camp inside the topic
+  const shownCamp = shown.filter((c) => !isNeutral(c));
+  const prev = shown[shown.length - 1];
+  let camps = BLOCS.filter((b) => campCards.some((c) => c.camp === b));
+  const notPrev = camps.filter((b) => !prev || isNeutral(prev) || b !== prev.camp);
+  if (notPrev.length) camps = notPrev;
+  const onTopic = (b: BlocCamp) => shownCamp.filter((c) => c.topic === topic && c.camp === b).length;
+  const overall = (b: BlocCamp) => shownCamp.filter((c) => c.camp === b).length;
+  const camp = [...camps].sort((a, b) => onTopic(a) - onTopic(b) || overall(a) - overall(b) || BLOCS.indexOf(a) - BLOCS.indexOf(b))[0];
+
+  const inTopic = campCards.filter((c) => c.camp === camp && c.topic === topic).sort(newestFirst);
+  if (inTopic.length) return inTopic[0];
+  // 4. That camp, from the best-liked other topic
+  return campCards.filter((c) => c.camp === camp).sort((a, b) => weight(b.topic) - weight(a.topic) || newestFirst(a, b))[0];
 }
 
 const MONTHS = {

@@ -27,7 +27,14 @@ type Stats = {
   sharedPerType: Record<string, number>;
   shareMethods: Record<string, number>;
   items: Record<string, { type: string; n: number; correct: number }>;
-  feed: { avgCardsViewed: number; skipRate: number | null; likesPerCamp: Record<string, number>; dislikesPerCamp: Record<string, number> };
+  feed: {
+    avgCardsViewed: number;
+    skipRate: number | null;
+    likesPerCamp: Record<string, number>;
+    dislikesPerCamp: Record<string, number>;
+    likesPerTopic: Record<string, number>;
+    dislikesPerTopic: Record<string, number>;
+  };
   quizAvg: number | null;
   voix: { avg: number; levels: Record<string, number>; cityViewRate: number | null };
   emails: number;
@@ -435,6 +442,11 @@ export function StatsClient() {
           <Bars data={stats.feed.likesPerCamp} />
           <h3 className="mt-2 font-semibold">👎 par camp (anonyme)</h3>
           <Bars data={stats.feed.dislikesPerCamp} />
+          <h3 className="mt-2 font-semibold">👍 par thème (anonyme)</h3>
+          <Bars data={stats.feed.likesPerTopic ?? {}} />
+          <h3 className="mt-2 font-semibold">👎 par thème (anonyme)</h3>
+          <Bars data={stats.feed.dislikesPerTopic ?? {}} />
+          <p className="text-xs text-muted">Le fil n&apos;apprend que les thèmes, jamais les camps : ces chiffres servent à vérifier l&apos;équilibre, pas à orienter le fil.</p>
         </Card>
         <Card className="flex flex-col gap-2">
           <h2 className="font-display text-lg font-bold">Profils ({stats.profile.completed})</h2>
@@ -447,7 +459,7 @@ export function StatsClient() {
           <Bars data={stats.profile.registered} />
           <h3 className="mt-2 font-semibold">Sujets choisis</h3>
           <Bars data={stats.profile.interests} />
-          <p className="text-xs text-muted">La position politique n&apos;est jamais envoyée : elle reste sur le téléphone du joueur.</p>
+          <p className="text-xs text-muted">On ne demande jamais la position politique. Les préférences du fil (par thème) restent sur le téléphone du joueur.</p>
         </Card>
         <Card className="flex flex-col gap-2">
           <h2 className="font-display text-lg font-bold">Bâtiments explorés dans « Ma ville »</h2>

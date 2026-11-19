@@ -6,12 +6,15 @@ import { IconClose, IconDown, IconInfo, IconUp } from "@/components/Icons";
 import { CampIcon } from "@/components/CampIcon";
 import { InlineChallenge } from "@/components/InlineChallenge";
 import { Button, ButtonLink } from "@/components/ui";
-import type { BlocCamp, Camp, FeedCard } from "@/lib/content";
-import { buildPool, campRotation, formatDate, pickNext } from "@/lib/feed";
+import type { Camp, FeedCard } from "@/lib/content";
+import { SCORE, buildPool, effectiveScores, formatDate, pickNext, topTopics, type TopicScores } from "@/lib/feed";
 import { useContent, useT } from "@/lib/i18n";
 import { useProfile } from "@/lib/profile";
 import { recordCampRead } from "@/lib/progress";
+import { hashSeed, randomStream } from "@/lib/rng";
+import { getSessionId } from "@/lib/session";
 import { readSession, writeSession } from "@/lib/storage";
+import { addTopicScore, resetTopicScores, useTopicScores } from "@/lib/topicScores";
 import { track } from "@/lib/track";
 import { VOIX, addVoix } from "@/lib/voix";
 
@@ -60,25 +63,21 @@ function Feed() {
   const usedQuestions = useRef(new Set<string>());
   const scroller = useRef<HTMLDivElement>(null);
 
-  const likes = useMemo(() => {
-    const out: Partial<Record<BlocCamp, number>> = {};
-    for (const [id, r] of Object.entries(reactions)) {
-      const camp = pool.find((c) => c.id === id)?.camp;
-      if (r === "up" && camp && camp !== "neutre") out[camp] = (out[camp] ?? 0) + 1;
-    }
-    return out;
-  }, [reactions, pool]);
-
-  const ctx = useMemo(() => ({ likes, interests: profile.interests, position: profile.position }), [likes, profile.interests, profile.position]);
+  // What the feed learned, per topic only (lib/topicScores.ts), plus +2 for the topics chosen at onboarding.
+  const learned = useTopicScores();
+  const scores = useMemo(() => effectiveScores(learned, profile.interests), [learned, profile.interests]);
+  // Random but seeded by this phone's id and the card's position: the same phone always gets the same next card.
+  const next = useCallback((o: string[]) => pickNext(pool, o, { scores, random: randomStream(hashSeed(`${getSessionId()}:${o.length}`)).next }), [pool, scores]);
+  const detailsOpened = useRef(new Set<string>());
 
   // Start with the first card, then keep exactly one card ahead of the reader.
   useEffect(() => {
     setOrder((o) => {
       if (o.length) return o;
-      const first = pickNext(pool, [], ctx);
+      const first = next([]);
       return first ? [first.id] : [];
     });
-  }, [pool, ctx]);
+  }, [next]);
 
   const sections: Section[] = useMemo(() => {
     const out: Section[] = [];
@@ -107,10 +106,10 @@ function Feed() {
   useEffect(() => {
     const lastCardPos = sections.map((s) => s.kind).lastIndexOf("card");
     if (current >= lastCardPos && order.length && order.length < pool.length) {
-      const next = pickNext(pool, order, ctx);
-      if (next) setOrder((o) => (o.includes(next.id) ? o : [...o, next.id]));
+      const card = next(order);
+      if (card) setOrder((o) => (o.includes(card.id) ? o : [...o, card.id]));
     }
-  }, [current, sections, order, pool, ctx]);
+  }, [current, sections, order, pool, next]);
 
   const onCardVisible = useCallback((card: FeedCard) => {
     if (seen.current.has(card.id)) return;
@@ -156,9 +155,19 @@ function Feed() {
   }, [current, sections.length, goTo]);
 
   const react = (card: FeedCard, reaction: "up" | "down") => {
+    const before = reactions[card.id];
+    if (before === reaction) return;
     setReactions((r) => ({ ...r, [card.id]: reaction }));
-    // Anonymous on purpose: reactions per camp are never linked to a player.
-    track("feed_reaction", { cardId: card.id, camp: card.camp, reaction }, { anonymous: true });
+    // The like counts for the card's topic only, never for its camp. Changing 👍 to 👎 undoes the first one.
+    addTopicScore(card.topic, SCORE[reaction] - (before ? SCORE[before] : 0));
+    // Anonymous on purpose: no session id, so a reaction can never be linked to a player.
+    track("feed_reaction", { cardId: card.id, camp: card.camp, topic: card.topic, reaction }, { anonymous: true });
+  };
+
+  const openDetails = (card: FeedCard) => {
+    if (detailsOpened.current.has(card.id)) return;
+    detailsOpened.current.add(card.id);
+    addTopicScore(card.topic, SCORE.details);
   };
 
   const total = pool.length;
@@ -208,7 +217,7 @@ function Feed() {
         {sections.map((s, pos) => (
           <section key={s.kind === "card" ? s.card.id : s.kind === "challenge" ? `challenge-${s.n}` : s.kind} data-pos={pos} className="no-scrollbar flex h-full snap-start snap-always flex-col overflow-y-auto pb-6 pl-4 pr-[4.25rem] pt-[var(--top-space)]">
             <div className="my-auto">
-            {s.kind === "card" && <CardView card={s.card} reaction={reactions[s.card.id]} onReact={(r) => react(s.card, r)} first={pos === 0} />}
+            {s.kind === "card" && <CardView card={s.card} reaction={reactions[s.card.id]} onReact={(r) => react(s.card, r)} onOpenDetails={() => openDetails(s.card)} first={pos === 0} />}
             {s.kind === "challenge" && <InlineChallenge readCards={s.readCards} used={usedQuestions.current} onContinue={() => goTo(pos + 1)} />}
             {s.kind === "end" && (
               <div className="hero pop flex flex-col gap-4 rounded-[2rem] p-6">
@@ -228,12 +237,12 @@ function Feed() {
         ))}
       </div>
 
-      {showInfo && <InfoSheet onClose={() => setShowInfo(false)} interests={profile.interests} position={profile.position} />}
+      {showInfo && <InfoSheet onClose={() => setShowInfo(false)} scores={scores} learned={learned} />}
     </div>
   );
 }
 
-function CardView({ card, reaction, onReact, first }: { card: FeedCard; reaction?: "up" | "down"; onReact: (r: "up" | "down") => void; first: boolean }) {
+function CardView({ card, reaction, onReact, onOpenDetails, first }: { card: FeedCard; reaction?: "up" | "down"; onReact: (r: "up" | "down") => void; onOpenDetails: () => void; first: boolean }) {
   const c = useContent();
   const t = useT();
   const topic = c.topicOf(card.topic);
@@ -261,12 +270,12 @@ function CardView({ card, reaction, onReact, first }: { card: FeedCard; reaction
           <h2 className="font-display text-[26px] font-bold leading-[1.15]">{card.title}</h2>
           <p className="text-[17px] leading-relaxed">{card.text}</p>
           {card.why && (
-            <p className="rounded-2xl bg-paper px-4 py-3 text-[15px]">
+            <p className="rounded-2xl bg-fill px-4 py-3 text-[15px]">
               <strong>{t("Pour toi :", "For you:")}</strong> {card.why}
             </p>
           )}
           {card.sides && (
-            <details className="group rounded-2xl bg-paper px-4 py-3">
+            <details className="group rounded-2xl bg-fill px-4 py-3" onToggle={(e) => e.currentTarget.open && onOpenDetails()}>
               <summary className="flex min-h-8 cursor-pointer list-none items-center justify-between gap-2 text-sm font-bold">
                 {t("Ce que dit chaque camp", "What each side says")} ({card.sides.length})
                 <span className="transition group-open:rotate-180" aria-hidden>
@@ -316,10 +325,12 @@ function CardView({ card, reaction, onReact, first }: { card: FeedCard; reaction
   );
 }
 
-function InfoSheet({ onClose, interests, position }: { onClose: () => void; interests: string[]; position: number | null }) {
+function InfoSheet({ onClose, scores, learned }: { onClose: () => void; scores: TopicScores; learned: TopicScores }) {
   const c = useContent();
   const t = useT();
-  const rotation = campRotation(position);
+  // The player's favourite topics: the top 3 among those with a positive score.
+  const top = topTopics(scores, c.topics.map((x) => x.id)).filter((id) => (scores[id] ?? 0) > 0);
+  const hasLearned = Object.values(learned).some((v) => v !== 0);
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-ink/50" onClick={onClose}>
       <div
@@ -339,24 +350,40 @@ function InfoSheet({ onClose, interests, position }: { onClose: () => void; inte
           </button>
         </div>
         <ul className="mt-4 flex flex-col gap-3 text-[15px]">
-          <li>🔁 {t("On alterne les actus de la gauche, du centre, de la droite et de l'extrême droite, avec des infos neutres entre les deux.", "We alternate news from the left, the centre, the right and the far right, with neutral facts in between.")}</li>
-          <li>👍 {t("Si tu aimes surtout un camp, on te montre davantage les autres : c'est le principe « autre point de vue ».", "If you mostly like one side, we show you more of the others: that's the \"other point of view\" rule.")}</li>
-          {interests.length > 0 && (
-            <li>
-              ⭐ {t("Tes sujets passent en premier dans chaque camp :", "Your topics come first within each side:")} {interests.map((id) => c.topicOf(id).label).join(", ")}.
-            </li>
-          )}
-          {position !== null && (
-            <li>
-              🧭 {t("Tu as indiqué ta position (gardée sur ton téléphone) : on commence par", "You set your position (kept on your phone): we start with")} {c.campLabels[rotation[0]].toLowerCase()}.
-            </li>
-          )}
+          <li>
+            👍 {t("Tes 👍 / 👎 comptent pour le thème de la carte, jamais pour le camp : les thèmes que tu aimes reviennent plus souvent.", "Your 👍 / 👎 count for the card's topic, never for its side: the topics you like come up more often.")}
+          </li>
+          <li>🔁 {t("Sur chaque thème, la gauche, le centre, la droite et l'extrême droite passent à tour de rôle, avec des infos neutres entre les deux.", "On every topic, the left, the centre, the right and the far right take turns, with neutral facts in between.")}</li>
+          <li>🧭 {t("Au moins une carte sur quatre vient d'un autre thème, pour sortir de tes habitudes.", "At least one card in four comes from another topic, to get you out of your habits.")}</li>
           <li>✅ {t("Chaque carte a une source. On ne te dira jamais pour qui voter.", "Every card has a source. We will never tell you who to vote for.")}</li>
           <li>📰 {t("Nos sources : médias publics, AFP, sites officiels et grands quotidiens sans ligne partisane.", "Our sources: public media, AFP, official sites and major newspapers with no partisan line.")}</li>
         </ul>
-        <Link href="/profil" className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[14px] bg-fill font-semibold text-accent">
-          {t("Modifier mes sujets", "Edit my topics")}
-        </Link>
+        <div className="mt-5 flex flex-col gap-2 rounded-2xl bg-fill p-4">
+          <p className="text-sm font-semibold">⭐ {t("Tes thèmes préférés", "Your favourite topics")}</p>
+          {top.length ? (
+            <div className="flex flex-wrap gap-2">
+              {top.map((id) => {
+                const tp = c.topicOf(id);
+                return (
+                  <span key={id} className="rounded-full bg-card px-3 py-1 text-sm font-semibold">
+                    {tp.emoji} {tp.label}
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-sm text-muted">{t("Pas encore : réagis à quelques cartes.", "None yet: react to a few cards.")}</p>
+          )}
+          <p className="text-xs text-muted">{t("Gardé uniquement sur ton téléphone.", "Kept on your phone only.")}</p>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <Button variant="secondary" onClick={resetTopicScores} disabled={!hasLearned} className="!px-3 !text-[15px]">
+            {t("Remettre à zéro", "Reset")}
+          </Button>
+          <Link href="/profil" className="inline-flex min-h-[50px] items-center justify-center rounded-[14px] bg-fill px-3 text-center text-[15px] font-semibold text-accent">
+            {t("Modifier mes sujets", "Edit my topics")}
+          </Link>
+        </div>
       </div>
     </div>
   );

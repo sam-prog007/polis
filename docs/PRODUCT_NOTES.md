@@ -6,8 +6,12 @@ Detailed choices behind polis. The [README](../README.md) has the overview; this
 
 - `/bienvenue` (onboarding): name, "can you vote in France?", habits (follows the news, voted, registered), an optional 3-question level test, topics, a 3-screen tutorial, result. Every step can be skipped ("Passer" / "Tout passer"). The account email is optional and saved in `accounts` through `/api/account`.
 - Level = right answers in the test + how often they follow the news → débutant / intermédiaire / avancé. Beginners get the "bases" cards first; advanced players go straight to the news. Not registered (or not sure) → the registration card comes first.
-- Feed rule (`lib/feed.ts`): camps take turns (gauche, centre, droite, extrême droite) with a neutral card after every 2; the player's topics first inside each camp; 👍 on a camp → the next cards come from the camps with the fewest 👍; if the player gave a position, the camps farthest from it come first. Nothing is ever hidden: every camp is always shown.
-- The left–right position is optional, set in the profile, and **never leaves the phone**.
+- Feed rule (`lib/feed.ts`, `pickNext`, since 2026-11-19, decision D2). Two promises, checked by `npm test` (`lib/feed.test.ts`, 300 simulated swipes):
+  1. **Theme preference.** The feed learns which *topics* the player likes, never which camp. Each topic has a score kept on the phone (`p27.topicScores`): swipe right / 👍 +1, swipe left / 👎 −1 (changing your mind undoes the first one), opening "Ce que dit chaque camp" +0.5; topics chosen at onboarding start at +2. The next topic is picked at random, weighted by score (`1 + score/2`, between 0.2 and 10), so liked topics come up more often (a player who likes only energy gets about half energy cards). Guard rails: never more than 3 cards in a row on the same topic, and at least 1 card in 4 from outside the player's top 3 topics. The random draw is seeded by the phone's id and the card's position, so a reload gives the same order.
+  2. **Camp balance.** Inside the chosen topic, the camp shown least on that topic so far comes next; ties go to the camp shown least overall; never the same camp twice in a row when there is a choice. If the topic has no card left from that camp, that camp's card comes from the best-liked other topic. A neutral card (the basics first) comes after every 2 or 3 camp cards. Likes never move a camp: a player who likes only left-wing cards still gets each camp at 25 % ± 5 of camp cards.
+- "Pourquoi ces actus ?" explains both rules, shows the player's top 3 topics and has a "Remettre à zéro" button (clears `p27.topicScores`; the onboarding topics stay).
+- The left–right slider was removed (D2): the feed doesn't need it, and it was the most sensitive data in the app. Phones that stored a position have it deleted the next time the app loads (`lib/profile.ts`).
+- Topics (`content/topics.json`): 13, including **Énergie** (fuel taxes, electricity, nuclear). "Emploi" became "Emploi et retraites". Every card is filed under the topic its substance is about (e.g. the fuel-tax cards under Énergie, not Pouvoir d'achat).
 
 ## Challenges
 
@@ -23,7 +27,8 @@ Detailed choices behind polis. The [README](../README.md) has the overview; this
 
 ## Privacy
 
-- The political position is never in any event. The server strips `position`, `ideas`, `leaning`, `opinion`, `side`, `pour` and `contre` from every event.
+- The app never asks for a political position. The server still strips `position`, `ideas`, `leaning`, `opinion`, `side`, `pour` and `contre` from every event, as a safety net.
+- `feed_reaction` has no session id (anonymous) and carries `cardId`, `camp`, `topic`, `reaction`. `/stats` shows likes per camp and per topic, to check the balance; topic scores themselves never leave the phone.
 - The Pour / Contre answer in "Défends l'autre camp" stays in the component state: never stored, never sent.
 - Feed 👍 / 👎 (`feed_reaction`) are stored **without session id or tester tag**: likes per camp can be counted, but never linked to a player.
 - The account has an email and no password (one row per email, linked to the last session that used it). It is never used to write to players: the "prochains défis" emails (`emails` table) need the consent box ticked. First name optional.

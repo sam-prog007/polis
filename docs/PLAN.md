@@ -160,6 +160,8 @@ Answered by the team on 2026-11-13, except D5.
 
 **Goal:** preferences are learned **per theme**, and inside every theme all camps get equal turns.
 
+**Status: done on 2026-11-19.** `lib/feed.ts` (`pickNext`), `lib/topicScores.ts`, tests in `lib/feed.test.ts` (`npm test`, 8 tests). Rules written in `docs/PRODUCT_NOTES.md`.
+
 **Today** (`lib/feed.ts`, `pickNext`): camps take turns, a 👍 on a camp pushes the *other* camps forward, and the optional left–right position decides which camp comes first. Themes only break ties inside a camp.
 
 **New rule**

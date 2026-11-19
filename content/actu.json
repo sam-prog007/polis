@@ -272,7 +272,7 @@
     {
       "id": "macron-taxes-carburants",
       "date": "2026-09-24",
-      "topic": "pouvoir-achat",
+      "topic": "energie",
       "camp": "centre",
       "actor": "Emmanuel Macron",
       "title": "Macron n'exclut pas de baisser les taxes sur les carburants",
@@ -322,7 +322,7 @@
     {
       "id": "rn-bardella-seul-candidat",
       "date": "2026-09-21",
-      "topic": "institutions",
+      "topic": "election",
       "camp": "extreme-droite",
       "actor": "Rassemblement national",
       "title": "RN : Bardella seul candidat à sa réélection",
@@ -384,7 +384,7 @@
     {
       "id": "roussel-taxes-essence",
       "date": "2026-09-12",
-      "topic": "pouvoir-achat",
+      "topic": "energie",
       "camp": "gauche",
       "actor": "Parti communiste français",
       "title": "Roussel réclame une baisse des taxes sur l'essence",

@@ -124,7 +124,7 @@ export function ResultClient() {
         </summary>
       <section className="flex flex-col gap-3 px-2 pb-2" aria-label={t("Correction", "Answers")}>
         {result.items.map((item, i) => (
-          <Card key={item.id} className="flex flex-col gap-2 !bg-paper">
+          <Card key={item.id} className="flex flex-col gap-2">
             <p className="text-sm font-semibold text-muted">{isProno ? `${t("Prono", "Prediction")} ${i + 1}` : `Question ${i + 1}`}</p>
             <p className="font-semibold">{item.question}</p>
             {isProno ? (

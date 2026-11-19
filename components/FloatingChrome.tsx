@@ -38,19 +38,23 @@ export function FloatingChrome() {
   const profile = useProfile();
   const { total } = useVoix();
   const [mounted, setMounted] = useState(false);
-  const [gains, setGains] = useState<{ id: number; amount: number }[]>([]);
+  // One bubble at a time: gains that arrive while it shows add up ("+2 voix") and keep it up 1.5 s more.
+  const [gain, setGain] = useState<{ id: number; amount: number } | null>(null);
 
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    let n = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const onGain = (e: Event) => {
       const { amount } = (e as CustomEvent<GainDetail>).detail;
-      const id = ++n + Date.now();
-      setGains((g) => [...g, { id, amount }]);
-      setTimeout(() => setGains((g) => g.filter((x) => x.id !== id)), 1500);
+      setGain((g) => ({ id: Date.now(), amount: (g?.amount ?? 0) + amount }));
+      clearTimeout(timer);
+      timer = setTimeout(() => setGain(null), 1500);
     };
     window.addEventListener("voix:gain", onGain);
-    return () => window.removeEventListener("voix:gain", onGain);
+    return () => {
+      window.removeEventListener("voix:gain", onGain);
+      clearTimeout(timer);
+    };
   }, []);
 
   if (path === "/stats") return null;
@@ -106,11 +110,11 @@ export function FloatingChrome() {
           />
         </svg>
         <AvatarFace profile={mounted ? profile : { avatar: null, firstName: "" }} className="h-[34px] w-[34px] text-base" />
-        {gains.map((g) => (
-          <span key={g.id} className="glass bubble pointer-events-none absolute right-0 top-[calc(100%+6px)] whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-bold text-accent" aria-hidden>
-            +{g.amount} voix
+        {gain && (
+          <span key={gain.id} className="glass bubble pointer-events-none absolute right-0 top-[calc(100%+6px)] whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-bold text-accent" aria-hidden>
+            +{gain.amount} voix
           </span>
-        ))}
+        )}
       </Link>
     </>
   );

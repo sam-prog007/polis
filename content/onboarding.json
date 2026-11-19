@@ -100,10 +100,6 @@
       "text": "Direct à l'actu de la campagne, de tous les bords."
     }
   },
-  "ideas": {
-    "question": "Ta position (facultatif)",
-    "privacy": "Elle reste uniquement sur ton téléphone. On s’en sert seulement pour te montrer plus souvent les idées des autres camps. On ne te dira jamais pour qui voter."
-  },
   "voter": {
     "question": "Tu peux voter à la présidentielle en France ?",
     "options": [

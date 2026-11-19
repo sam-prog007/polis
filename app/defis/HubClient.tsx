@@ -116,7 +116,7 @@ export function HubClient() {
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="flex items-baseline justify-between gap-3">
                     <span className="font-display text-xl font-bold">{card.title}</span>
-                    <span className="shrink-0 rounded-full bg-paper px-2.5 py-0.5 text-xs font-bold text-muted">{card.duration}</span>
+                    <span className="shrink-0 rounded-full bg-fill px-2.5 py-0.5 text-xs font-bold text-muted">{card.duration}</span>
                   </span>
                   <span className="text-[15px] leading-snug text-muted">{card.description}</span>
                 </span>

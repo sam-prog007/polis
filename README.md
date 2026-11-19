@@ -78,7 +78,7 @@ Row Level Security is on for every table, with no policy. The browser never talk
 
 The repository is connected to Vercel: **every push to `main` redeploys <https://polis-seven.vercel.app>** (about 1 minute).
 
-- Run `npm run build` before pushing. If the build fails locally, the deploy fails too and the live site keeps the previous version.
+- Run `npm test` (feed rule) and `npm run build` before pushing. If the build fails locally, the deploy fails too and the live site keeps the previous version.
 - To try a change without touching the live site, push to another branch: Vercel creates a separate preview link.
 - Secrets live in Vercel and in each person's `.env.local`. Never commit them.
 

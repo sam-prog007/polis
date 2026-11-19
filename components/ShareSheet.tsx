@@ -81,7 +81,7 @@ export function ShareSheet({ open, onClose, message, url, challengeType, code, t
             <li>3. {t(`Vous comparez vos scores, et tu gagnes +${VOIX.friendPlayed} voix quand il a joué.`, `You compare scores, and you get +${VOIX.friendPlayed} voix once they've played.`)}</li>
           </ol>
         )}
-        <p id="share-text" className="mt-3 rounded-2xl bg-paper p-4 text-[15px] leading-snug">
+        <p id="share-text" className="mt-3 rounded-2xl bg-fill p-4 text-[15px] leading-snug">
           {message}
         </p>
         <div className="mt-4 flex flex-col gap-3">

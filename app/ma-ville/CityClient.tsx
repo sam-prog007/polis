@@ -246,7 +246,7 @@ function BuildingSheet({ b, built, total, onClose }: { b: CityBuilding; built: b
               <p className="mb-2 text-sm font-bold">{t("Qui décide ?", "Who decides?")}</p>
               <ul className="flex flex-col gap-2">
                 {b.facts.map((f) => (
-                  <li key={f} className="rounded-2xl bg-paper px-4 py-3 text-[15px] leading-snug">
+                  <li key={f} className="rounded-2xl bg-fill px-4 py-3 text-[15px] leading-snug">
                     {f}
                   </li>
                 ))}
@@ -261,7 +261,7 @@ function BuildingSheet({ b, built, total, onClose }: { b: CityBuilding; built: b
           </div>
         ) : (
           <div className="mt-5 flex flex-col gap-4">
-            <p className="flex items-center gap-2 rounded-2xl bg-paper px-4 py-3">
+            <p className="flex items-center gap-2 rounded-2xl bg-fill px-4 py-3">
               <IconLock width={20} height={20} className="shrink-0 text-muted" />
               <span>
                 {t("Se débloque quand ta ville devient", "Unlocks when your city becomes")} <strong>{unlock.withArticle}</strong> ({unlock.min} voix). {t("Encore", "Still")}{" "}

@@ -1,3 +1,4 @@
+import { allFeedCards } from "@/lib/content";
 import { db, fetchAll, passwordOk, readJsonBody } from "@/lib/server/db";
 
 type EventRow = { created_at: string; session_id: string | null; event: string; payload: Record<string, unknown> };
@@ -100,6 +101,10 @@ export async function POST(req: Request) {
   const reactions = events.filter((e) => e.event === "feed_reaction");
   const likesPerCamp = countBy(reactions.filter((e) => p(e, "reaction") === "up"), (e) => String(p(e, "camp")));
   const dislikesPerCamp = countBy(reactions.filter((e) => p(e, "reaction") === "down"), (e) => String(p(e, "camp")));
+  // Reactions sent before the theme-based feed have no topic: find it from the card id.
+  const topicOfReaction = (e: EventRow) => (p(e, "topic") as string | undefined) ?? allFeedCards.find((c) => c.id === p(e, "cardId"))?.topic;
+  const likesPerTopic = countBy(reactions.filter((e) => p(e, "reaction") === "up"), topicOfReaction);
+  const dislikesPerTopic = countBy(reactions.filter((e) => p(e, "reaction") === "down"), topicOfReaction);
 
   // Per-session table
   const bySession = new Map<string, EventRow[]>();
@@ -236,6 +241,8 @@ export async function POST(req: Request) {
       skipRate: landingSessions.size ? feedSkipSessions.size / landingSessions.size : null,
       likesPerCamp,
       dislikesPerCamp,
+      likesPerTopic,
+      dislikesPerTopic,
     },
     quizAvg: quizFinish.length ? quizFinish.reduce((a, e) => a + Number(p(e, "score") ?? 0), 0) / quizFinish.length : null,
     voix: {

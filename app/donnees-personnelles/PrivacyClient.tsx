@@ -33,8 +33,8 @@ export function PrivacyClient() {
         <h2 className="font-display text-lg font-bold">{t("Ce qu'on ne collecte jamais", "What we never collect")}</h2>
         <p>
           {t(
-            "Ton opinion politique. Si tu indiques ta position dans ton profil, elle reste uniquement sur ton téléphone. Dans « Défends l'autre camp », ta réponse Pour / Contre reste aussi dans ton navigateur. Les 👍 / 👎 du fil sont enregistrés sans aucun identifiant.",
-            "Your political opinion. If you set your position in your profile, it stays only on your phone. In \"Defend the other side\", your For / Against answer also stays in your browser. Feed 👍 / 👎 are recorded without any identifier.",
+            "Ton opinion politique : on ne te la demande jamais. Le fil apprend seulement les thèmes que tu aimes (logement, énergie…), jamais un camp, et ces préférences restent sur ton téléphone. Dans « Défends l'autre camp », ta réponse Pour / Contre reste aussi dans ton navigateur. Les 👍 / 👎 du fil sont enregistrés sans aucun identifiant.",
+            "Your political opinion: we never ask for it. The feed only learns the topics you like (housing, energy…), never a side, and these preferences stay on your phone. In \"Defend the other side\", your For / Against answer also stays in your browser. Feed 👍 / 👎 are recorded without any identifier.",
           )}
         </p>
         <h2 className="font-display text-lg font-bold">{t("Pourquoi et combien de temps", "Why and for how long")}</h2>

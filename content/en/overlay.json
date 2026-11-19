@@ -719,13 +719,16 @@
       "label": "Cost of living"
     },
     "emploi": {
-      "label": "Jobs"
+      "label": "Jobs and pensions"
     },
     "etudes": {
       "label": "Studies and grants"
     },
     "climat": {
       "label": "Climate"
+    },
+    "energie": {
+      "label": "Energy"
     },
     "sante": {
       "label": "Health"
@@ -1649,10 +1652,6 @@
         "label": "Advanced",
         "text": "Straight to the campaign news, from all sides."
       }
-    },
-    "ideas": {
-      "question": "Your position (optional)",
-      "privacy": "It stays only on your phone. We only use it to show you the other sides' ideas more often. We will never tell you who to vote for."
     },
     "voter": {
       "question": "Can you vote in the French presidential election?",
