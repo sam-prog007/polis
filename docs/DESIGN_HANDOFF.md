@@ -17,7 +17,7 @@ Users mostly arrive from a link on their phone (WhatsApp, Instagram, a QR code o
 | No top bar (D3) | Floating glass buttons instead: avatar top right (every screen except onboarding and `/stats`), back button top left on sub-pages. Both `h-11 w-11` (44px), 16px from the side, safe area + 12px from the top | Content uses the full screen; the chrome floats over it |
 | Tab bar | Floating glass capsule, `h-16` (64px), 16px from the sides, safe area + 12px from the bottom, max 416px wide, 4 tabs. A spacer of `var(--nav-space)` (safe area + 92px) ends each page so the last content scrolls clear of it | Thumb reach |
 | Bottom sheets | full width up to `max-w-md`, `max-h-[88dvh]`, scroll inside | Native sheet pattern |
-| Feed | full-height vertical snap scroll, one card per screen, `pr-[4.25rem]` to leave room for the arrows | Story-like reading |
+| Feed | Newspaper swipe stack (Phase 5): a header line (progress, ⓘ) level with the avatar, a stack of 3 cards filling the height (`calc(100dvh - var(--nav-space))`), and ✕ ↺ ♥ under it | One card at a time, one thumb |
 
 There is no tablet or desktop layout: the same column is used at every width.
 
@@ -65,7 +65,7 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | Hero title | `font-display text-[2.6rem] font-extrabold leading-[1]` | 41.6px / 800 |
 | Page title | `font-display text-4xl font-extrabold leading-none` | 36px / 800 |
 | Section / sheet title | `font-display text-2xl font-bold` | 24px / 700 |
-| News card title | `font-display text-[26px] font-bold leading-[1.15]` | 26px / 700 |
+| News card headline | `font-serif text-[30px] font-semibold leading-[1.08]` (Newsreader, `next/font/google`, self-hosted; fallback New York / Georgia) | 30px / 600 |
 | Question | `font-display text-2xl font-bold leading-snug` (quick challenge: `text-[22px]`) | 24 / 22px |
 | Body | `text-[17px] leading-relaxed` | 17px (iOS body) |
 | Secondary | `text-[15px]` / `text-sm` | 15 / 14px |
@@ -83,7 +83,7 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | `rounded-[14px]` (options) / `rounded-2xl` | 14px / 16px | Answer options / inner boxes ("Pour toi", sides) |
 | `rounded-full` | — | Chips, pills, icon buttons |
 | Card border + shadow | 1px `line` + `--shadow` (`0 1px 2px` + `0 6px 20px`, 4–5% navy) | Every card (`.tile`, `.hero`): on a white page a card needs its hairline |
-| Floating arrow shadow | `0 4px 16px rgba(0,0,0,.12)` | Feed up arrow |
+| Swipe buttons | ✕ and ♥ 56px circles with a 2px `bad` / `ok` border at 40%, ↺ 44px | Under the stack |
 | Spacing | Tailwind scale: `gap-2` 8px inside groups, `gap-3` 12px in lists, `gap-5` 20px between sections, `p-5` 20px card padding | — |
 
 ## Components
@@ -104,7 +104,9 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | `Logo` | light / `onDark` / `mark` | `className`, `onDark`, `mark` | Shows the black file, and the `-white` file in dark mode. Only on the home page now (next to the avatar) |
 | `City` | static / `interactive` | `voix`, `label`, `interactive`, `selected`, `onSelect` | SVG scene 360×200. Has its own fixed daylight palette in both themes (it is an illustration and must export to PNG) |
 | `ChallengePlayer` | 5 challenge types | `type`, `mode`, `level`, `fixedIds`, `items`, `refChallenge`, `match` | One question per screen + feedback block |
-| `InlineChallenge` | — | `readCards`, `used`, `onContinue` | "⚡ Défi rapide" inside the feed, every 3 cards |
+| `InlineChallenge` | — | `readCards`, `used`, `onContinue` | "⚡ Défi rapide" as a locked card in the feed stack, every 3 cards |
+| `NewsCard` / `ArticleSheet` | — | `card` | `components/feed/NewsCard.tsx`. A newspaper clipping: thin double rule, masthead "polis · L'édition du jour · date", red topic kicker, date, neutral camp chip, serif headline, sans body (long texts fade out), source byline, "Lire la suite ›". Tapping opens `ArticleSheet` |
+| `SwipeStack` | unlocked / locked | `items`, `onSwipe`, `onUndo`, `canUndo`, `lockedActions`, `paused` | `components/feed/SwipeStack.tsx`. 3-card stack, pointer events + CSS transforms, no animation library |
 | `ShareSheet` | challenge / city | `message`, `url`, `challengeType`, `code` | Web Share (if available), WhatsApp, Copy link; 3-step explanation for challenges |
 | `LevelUp` | — | — | Overlay when the city reaches a new level |
 | `EmailCapture` | idle / sending / done / error | — | Consent checkbox is required before the button enables. Email prefilled from the account |
@@ -122,9 +124,9 @@ System font stack (SF Pro on Apple devices): `--font-sans` for text, `--font-dis
 | Feedback block | After every answer | ✓ Bien vu ! / ✗ Raté · the right answer (if wrong) · "Pourquoi" · source · "Question suivante" (autofocus). **Never auto-advance**: testers asked to always see why |
 | Streak | 2+ right in a row | 🔥 ×n pill in the header; from 3 in a row, +5 voix bonus line in the feedback |
 | Vrai ou Faux card | Drag | Follows the finger, rotates `dx/18`°; "Vrai"/"Faux" label from 40px; commits at ±80px; else springs back (0.3s ease) |
-| Feed reaction 👍 / 👎 | Selected | `border-accent bg-accent-soft text-accent`; can be changed; sent anonymously |
-| Feed arrows | First / last card | Up disabled on the first section, down disabled at the end (`opacity-30`) |
-| Feed "Ce que dit chaque camp" | Closed / open | Native `<details>`, chevron rotates 180° |
+| News card | Drag | Follows the finger, tilts `dx/22`°; a "J'aime" (right, `ok`) or "Pas pour moi" (left, `bad`) stamp fades in over 90px. Past 30 % of the width, or a flick faster than 0.6 px/ms, it flies off (280ms) and the cards behind move up; otherwise it springs back. Both directions count as read (+1 voix) and only change the topic score. Haptic "tap" |
+| News card | Tap / Enter | Opens the article sheet (`<Sheet>`): "Pour toi", what each camp says, voting-guide link, source. +0.5 to the topic, once per card |
+| Swipe stack | Locked | The quick challenge (every 3 cards) can't be swiped: answer it ("Continuer à lire →") or "Passer le défi →". The "Fin de l'édition" card ends the stack. ↺ undoes the last swipe (and its score) only right after it. First visit: a glass coach mark ("← Pas pour moi · J'aime →"), dismissed by "Compris" or the first swipe (`p27.feedCoachSeen`) |
 | Hub level picker | Selected | iOS segmented control: track `bg-fill`, segments `min-h-8 rounded-[9px] text-[13px] font-semibold`; selected segment is raised: `bg-card text-ink` (`dark:bg-white/20`) + shadow `0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04)`. Same control for the profile settings. Choice saved in `localStorage` (`p27.levelChoice`) |
 | Hub "Défier un ami" | Toggled | Block gets a 2px `accent` ring and the button turns `bg-accent-soft`; challenge list keeps only friend-compatible challenges; tapping one starts it in friend mode directly |
 | City building | Built | Pulsing accent dot; tap → sheet: "Qui décide ?", "Pour toi", source; haptic "tap" |
@@ -142,7 +144,7 @@ There are no hover-only interactions: every hover state must also work on tap.
 |---|---|
 | ≥ 448px (`max-w-md`) | Column stops growing, centred on `paper` |
 | `sm` (≥ 640px) | City on "Ma ville" stops scrolling sideways (`w-[170%]` → `sm:w-full`) |
-| Landscape phone | No special layout; the feed snap still works because heights use `dvh` |
+| Landscape phone | No special layout; the stack height uses `dvh` |
 
 Everything uses `env(safe-area-inset-*)` so it works as a home-screen web app on iPhone.
 
@@ -177,22 +179,22 @@ Everything uses `env(safe-area-inset-*)` so it works as a home-screen web app on
 | City clouds | Always | Drift 82px back and forth | 90s | ease-in-out, alternate |
 | City birds | Always | Cross the sky | 22s | linear, infinite |
 | Built building dot | Always | Radius 3 → 4.5 | 1.6s | SVG animate, infinite |
-| Feed hint arrow | First card | `animate-bounce` | Tailwind default | — |
-| Feed scroll | Arrow tap / keyboard | `scrollIntoView` smooth | Browser default | — |
+| News card | Swipe | `transform` + `opacity`, `cubic-bezier(.2,.7,.3,1)` | 280ms | Under reduced motion: a fade |
+| Cards behind | Top card leaves | `translateY(12px × depth) scale(1 − .045 × depth)` → forward | 280ms | ease-out |
 | Haptics | Answer / tap / level up | `navigator.vibrate` patterns in `lib/feedback.ts` (Android only, iOS ignores) | — | — |
 
 `prefers-reduced-motion: reduce` turns all animations and transitions off (0.01ms), including the lens slide and the voix bubble, stops clouds and birds, skips haptics and the glass refraction. `prefers-reduced-transparency: reduce` makes the glass solid.
 
 ## Accessibility Notes
 
-- **Focus order**: back button → avatar → page content top to bottom → tab bar. In the feed: header (progress, info) → current card → reactions → arrows.
+- **Focus order**: back button → avatar → page content top to bottom → tab bar. In the feed: header (progress, info) → top card (role button: Enter opens the article) → ✕ ↺ ♥.
 - **Focus ring**: `:focus-visible` 3px `accent` outline, 2px offset, everywhere. Never remove it.
 - **Sheets**: `role="dialog" aria-modal="true" aria-labelledby`, focus moves to the panel, Escape closes, body scroll locked. Close buttons have `aria-label` "Fermer" / "Close".
 - **Feedback** is announced: feedback block has `role="status" aria-live="polite"`; feed counter `aria-live="polite"`.
 - **Buttons with icons only** have `aria-label`: back, FR/EN ("Switch to English" / "Passer en français"), info, previous/next card, close.
 - **Toggles** use `aria-pressed` (topics, reactions, level segments, onboarding choices, friend mode); the current tab uses `aria-current="page"`.
 - **City**: the SVG has `role="img"` + label; in explore mode each building is a `role="button"` with `tabIndex=0`, Enter/Space to open, label "La mairie (à débloquer)". The building list under the city is the accessible alternative.
-- **Keyboard**: feed ↑/↓ arrow keys move between cards; Vrai ou Faux has real buttons besides swipe; every drag (sheet, card) has a button alternative.
+- **Keyboard**: in the feed, ← = "Pas pour moi", → = "J'aime" (ignored while a sheet is open or a field has focus); Vrai ou Faux has real buttons besides swipe; every drag (sheet, card) has a button alternative.
 - **Colour is never the only signal**: right/wrong also use ✓/✗ and text; sides use icons + labels; difficulty badges have text.
 - **Contrast**: `muted` on `paper` is the minimum text pair; don't put `muted` text on `fill`.
 - **Language**: `<html lang>` follows the FR/EN switch.
@@ -200,8 +202,6 @@ Everything uses `env(safe-area-inset-*)` so it works as a home-screen web app on
 
 ## Known issues to fix
 
-1. **Feed height uses the old nav height.** The feed scroller subtracts `4.25rem` for the bottom nav, but the nav is now `3.25rem` (`h-13`). That leaves a 16px gap under the feed. Fix: replace `4.25rem` with `3.25rem` in `app/feed/FeedClient.tsx`.
-2. **Same problem on the result page.** The sticky "Défie un·e ami·e" button sits at `bottom: 4.25rem`, 16px above the nav. Fix it in `app/defis/[type]/resultat/ResultClient.tsx`.
-3. **Not every sheet uses `<Sheet>` yet.** The feed `InfoSheet` and the challenges-hub mode picker still use their own overlay (`pop`, `bg-ink/50`). Only `ShareSheet` and the city building sheet use `<Sheet>`. Switch the other two so all sheets slide and drag the same way.
-4. **`SourceLink` label.** It renders "Source : …" with the French space before the colon in English too. Make it `t("Source :", "Source:")`.
+1. **Not every sheet uses `<Sheet>` yet.** The feed `InfoSheet` and the challenges-hub mode picker still use their own overlay (`pop`, `bg-ink/50`). Only `ShareSheet` and the city building sheet use `<Sheet>`. Switch the other two so all sheets slide and drag the same way.
+2. **`SourceLink` label.** It renders "Source : …" with the French space before the colon in English too. Make it `t("Source :", "Source:")`.
 5. **No vector logo.** The logo files are raster (PNG from JPEG PDFs). Ask the designer for SVGs before using the logo larger than 64px.

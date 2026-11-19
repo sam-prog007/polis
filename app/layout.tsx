@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Newsreader } from "next/font/google";
 import { Suspense } from "react";
 import { BadgeToast } from "@/components/BadgeToast";
 import { Boot } from "@/components/Boot";
@@ -9,6 +10,10 @@ import { GlassFilter } from "@/components/GlassFilter";
 import { LevelUp } from "@/components/LevelUp";
 import { THEME_SCRIPT } from "@/lib/theme-script";
 import "./globals.css";
+
+// Serif for the newspaper headlines in the feed. Downloaded at build time and served from our own domain:
+// the browser never calls Google.
+const newsreader = Newsreader({ subsets: ["latin"], display: "swap", variable: "--font-newsreader" });
 
 const description = "polis : comprends la présidentielle 2027 en 5 minutes, fais grandir ta ville et défie tes potes. Neutre, gratuit, sans inscription. Aussi en anglais.";
 
@@ -36,7 +41,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // suppressHydrationWarning: the inline script below sets data-theme on <html> before React hydrates.
-    <html lang="fr" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="fr" className={`h-full antialiased ${newsreader.variable}`} suppressHydrationWarning>
       <head>
         {/* Applies the saved theme (Automatique / Clair / Sombre) before the first paint, so the page never flashes. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />

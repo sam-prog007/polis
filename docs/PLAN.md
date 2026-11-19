@@ -188,6 +188,8 @@ Answered by the team on 2026-11-13, except D5.
 
 **Goal:** each card looks like a newspaper clipping. Swipe right if you like it, left if you don't.
 
+**Status: done on 2026-11-19.** `app/feed/FeedClient.tsx` rewritten around `components/feed/SwipeStack.tsx` and `components/feed/NewsCard.tsx`; Newsreader headlines via `next/font/google`. Checked with a Playwright run on an iPhone 13 viewport: 10 cards swiped with drags and buttons, 3 quick challenges, undo, keyboard, article sheet, end card; `feed_card_view` and `feed_reaction` still sent.
+
 **Card design**
 - White paper, a thin double rule at the top, a masthead line "polis · L'édition du jour · 13 nov. 2026".
 - The theme as a small-caps section label in red; the date and a neutral camp chip.

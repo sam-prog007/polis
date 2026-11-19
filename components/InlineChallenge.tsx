@@ -115,7 +115,7 @@ export function InlineChallenge({ readCards, used, onContinue }: { readCards: Fe
           👫 {t("Défie un·e ami·e", "Challenge a friend")} (+{VOIX.share} voix)
         </Button>
         <button onClick={onContinue} className="min-h-11 font-semibold text-accent underline underline-offset-4">
-          {t("Continuer à lire ↓", "Keep reading ↓")}
+          {t("Continuer à lire →", "Keep reading →")}
         </button>
         <ShareSheet open={sharing} onClose={() => setSharing(false)} message={message} url={url} challengeType="quiz" code={done.code} />
         <CommitPrompts paused={sharing} />
