@@ -53,6 +53,8 @@ Answered by the team on 2026-11-13, except D5.
 
 **Goal:** every source shown in the app comes from a trustworthy outlet, and the build refuses anything else.
 
+**Status: done on 2026-11-19.** The 17 citations were replaced (details in `content/actu-notes.md` and `content/content-notes.md`); `content/sources.json` and `scripts/check-sources.mjs` are in place.
+
 **Today:** 17 citations break the rule.
 
 | File | Item ids | Current source |

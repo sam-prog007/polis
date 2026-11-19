@@ -15,10 +15,10 @@
       "id": "vf-inscription",
       "statement": "Tu peux t'inscrire sur les listes électorales jusqu'à la veille du vote.",
       "answer": false,
-      "explanation": "Il faut être inscrit au plus tard le vendredi 12 mars 2027, le 6e vendredi avant le scrutin. La procuration, elle, n'a pas de date limite fixe : mieux vaut la faire tôt.",
+      "explanation": "Il faut être inscrit au plus tard le vendredi 12 mars 2027 pour voter au premier tour.",
       "source": {
-        "label": "Toute l'Europe",
-        "url": "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-calendrier-dates-inscription-candidats-vote/"
+        "label": "ICI",
+        "url": "https://www.ici.fr/infos/politique/presidentielle-2027-quelles-sont-les-dates-cles-de-l-election-7347028"
       },
       "difficulty": 1
     },
@@ -37,10 +37,10 @@
       "id": "vf-macron-mandat",
       "statement": "Emmanuel Macron peut se représenter en 2027.",
       "answer": false,
-      "explanation": "Depuis 2008, la Constitution dit que « nul ne peut exercer plus de deux mandats consécutifs ». Emmanuel Macron achève son 2e mandat : il ne peut pas être candidat en 2027.",
+      "explanation": "L'article 6 de la Constitution dit que « nul ne peut exercer plus de deux mandats consécutifs ». Emmanuel Macron achève son 2e mandat : il ne peut pas être candidat en 2027.",
       "source": {
-        "label": "Sud Radio",
-        "url": "https://www.sudradio.fr/sud-radio/macron-absent-en-2027-vers-un-troisieme-duel-contre-le-pen-en-2032"
+        "label": "Constitution, art. 6 (Conseil constitutionnel)",
+        "url": "https://www.conseil-constitutionnel.fr/le-bloc-de-constitutionnalite/texte-integral-de-la-constitution-du-4-octobre-1958-en-vigueur"
       },
       "difficulty": 1
     },
@@ -70,10 +70,10 @@
       "id": "vf-parrainages",
       "statement": "Pour être candidat, il faut au moins 500 signatures d'élus venant d'au moins 30 départements ou collectivités d'outre-mer.",
       "answer": true,
-      "explanation": "Ce sont les « parrainages ». Ils doivent parvenir au Conseil constitutionnel au plus tard le 12 mars 2027 à 18 h, et un élu ne peut parrainer qu'un seul candidat.",
+      "explanation": "Ce sont les « parrainages ». Ils doivent être déposés au plus tard le vendredi 12 mars 2027 à 18 h.",
       "source": {
-        "label": "Toute l'Europe",
-        "url": "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-calendrier-dates-inscription-candidats-vote/"
+        "label": "ICI",
+        "url": "https://www.ici.fr/infos/politique/presidentielle-2027-quelles-sont-les-dates-cles-de-l-election-7347028"
       },
       "difficulty": 2
     },
@@ -125,10 +125,10 @@
       "id": "vf-le-pen-candidate",
       "statement": "Après sa condamnation en appel le 7 juillet 2026, Marine Le Pen a confirmé qu'elle serait candidate en 2027.",
       "answer": true,
-      "explanation": "La cour d'appel l'a notamment condamnée à 15 mois d'inéligibilité ferme, ce qui rend sa candidature « théoriquement possible ». Elle l'a confirmée le jour même.",
+      "explanation": "La cour d'appel a réduit sa peine d'inéligibilité à 45 mois, dont 30 avec sursis : juridiquement, elle peut se présenter. Le soir même, sur TF1, elle a annoncé : « Ce soir, je suis candidate à l'élection présidentielle ».",
       "source": {
-        "label": "Europe 1",
-        "url": "https://www.europe1.fr/politique/en-direct-proces-en-appel-des-assistants-parlementaires-du-fn-marine-le-pen-arrive-au-palais-de-justice-pour-lannonce-de-la-decision-967578"
+        "label": "Public Sénat",
+        "url": "https://www.publicsenat.fr/actualites/politique/presidentielle-marine-le-pen-est-candidate-et-se-pourvoit-en-cassation"
       },
       "difficulty": 2
     },
