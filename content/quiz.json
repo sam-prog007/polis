@@ -41,10 +41,10 @@
       "question": "Jusqu'à quand peut-on s'inscrire sur les listes électorales pour la présidentielle ?",
       "options": ["La veille du vote", "Le 12 mars 2027", "Le 1er janvier 2027"],
       "answer": 1,
-      "explanation": "Il faut être inscrit au plus tard le vendredi 12 mars 2027, en ligne comme en mairie. La procuration, elle, n'a pas de date limite fixe : mieux vaut la faire tôt.",
+      "explanation": "Il faut être inscrit au plus tard le vendredi 12 mars 2027 pour voter au premier tour.",
       "source": {
-        "label": "Toute l'Europe",
-        "url": "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-calendrier-dates-inscription-candidats-vote/"
+        "label": "ICI",
+        "url": "https://www.ici.fr/infos/politique/presidentielle-2027-quelles-sont-les-dates-cles-de-l-election-7347028"
       },
       "difficulty": 2
     },
@@ -55,8 +55,8 @@
       "answer": 1,
       "explanation": "Il faut au moins 500 signatures d'élus, venant d'au moins 30 départements ou collectivités d'outre-mer différents.",
       "source": {
-        "label": "Toute l'Europe",
-        "url": "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-calendrier-dates-inscription-candidats-vote/"
+        "label": "ICI",
+        "url": "https://www.ici.fr/infos/politique/presidentielle-2027-quelles-sont-les-dates-cles-de-l-election-7347028"
       },
       "difficulty": 2
     },
@@ -89,10 +89,10 @@
       "question": "Qui proclame les résultats officiels de l'élection présidentielle ?",
       "options": ["Le ministère de l'Intérieur", "Le Conseil constitutionnel", "L'Assemblée nationale"],
       "answer": 1,
-      "explanation": "Le Conseil constitutionnel proclame les résultats officiels ; pour le second tour, au plus tard le 12 mai 2027.",
+      "explanation": "Le Conseil constitutionnel veille à la régularité de l'élection et en proclame les résultats (article 58 de la Constitution).",
       "source": {
-        "label": "Toute l'Europe",
-        "url": "https://www.touteleurope.eu/vie-politique-des-etats-membres/presidentielle-2027-calendrier-dates-inscription-candidats-vote/"
+        "label": "Constitution, art. 58 (Conseil constitutionnel)",
+        "url": "https://www.conseil-constitutionnel.fr/le-bloc-de-constitutionnalite/texte-integral-de-la-constitution-du-4-octobre-1958-en-vigueur"
       },
       "difficulty": 3
     },

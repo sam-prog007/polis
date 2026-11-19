@@ -153,13 +153,7 @@
     },
     "attal-pacte-jeunesse": {
       "title": "Attal presents a \"pact for young people\"",
-      "text": "In Lyon on 10 October, Gabriel Attal (Renaissance) proposed keeping Parcoursup (the higher education admissions platform) but reforming it, with less continuous assessment and more final exams. He also wants fewer pupils per class and a convention of 150 young people aged 16 to 25 chosen by lot.",
-      "sides": [
-        {
-          "label": "LFI (Jean-Luc Mélenchon)",
-          "text": "replied on X, denouncing Attal's \"appalling duplicity\"."
-        }
-      ],
+      "text": "In Lyon on 10 October, Gabriel Attal (Renaissance) presented his \"pact for young people\": \"fewer pupils per class and more teachers in front of pupils\", better-paid teachers and shorter higher education courses. He does not want to abolish Parcoursup (the higher education admissions platform), but to \"change\" it.",
       "quiz": {
         "question": "What does Gabriel Attal propose for Parcoursup?",
         "options": [
@@ -167,13 +161,13 @@
           "Replace it with a lottery",
           "Keep it but reform it"
         ],
-        "explanation": "He wants to keep it, with less continuous assessment and more support."
+        "explanation": "He does not want to abolish it, but to \"change\" it."
       }
     },
     "platret-candidat": {
       "actor": "Gilles Platret (independent right)",
       "title": "Gilles Platret declares his candidacy",
-      "text": "On 8 October, Gilles Platret, mayor of Chalon-sur-Saône (independent right, formerly LR), made his candidacy official at a public meeting in his town. He proposes abolishing the 35-hour week and restoring national borders. He still has to gather 500 parrainages (official sponsorships from elected officials).",
+      "text": "On 8 October, Gilles Platret, independent right mayor of Chalon-sur-Saône and former vice-president of Les Républicains (LR), declared his candidacy. He wants to abolish the 35-hour week and \"restore borders\".",
       "why": "The legal 35-hour working week sets the point from which overtime hours are counted.",
       "quiz": {
         "question": "What does Gilles Platret propose on working time?",
@@ -258,15 +252,15 @@
     },
     "becht-extreme-centre": {
       "title": "Olivier Becht, candidate of the \"extreme centre\"",
-      "text": "On 24 September, in Paris Match, Olivier Becht, MP for the Haut-Rhin and former Minister Delegate for Foreign Trade, announced his candidacy. He calls himself \"in the extreme centre\" and presents a plan called \"Le Projet France, Refonder ou Périr\" (\"The France Project: Rebuild or Perish\").",
+      "text": "Olivier Becht, MP for the Haut-Rhin affiliated with Renaissance and former Minister for Foreign Trade under Élisabeth Borne, is running for president. He wants to embody \"the extreme centre\" and proposes, among other things, a \"universal permanent contract\" (CDI universel).",
       "quiz": {
         "question": "Which ministerial post did Olivier Becht hold?",
         "options": [
           "Interior Minister",
-          "Minister Delegate for Foreign Trade",
+          "Minister for Foreign Trade",
           "Education Minister"
         ],
-        "explanation": "He was Minister Delegate for Foreign Trade from 2022 to January 2024."
+        "explanation": "He was Minister for Foreign Trade in Élisabeth Borne's government."
       }
     },
     "macron-taxes-carburants": {
@@ -317,7 +311,7 @@
     },
     "rn-bardella-seul-candidat": {
       "title": "RN: Bardella is the only candidate for re-election",
-      "text": "More than 112,000 members of the Rassemblement national (RN) are invited to vote online until 22 October to elect the party president, ahead of a congress in Orléans at the end of October. Jordan Bardella is the only candidate; members can also cast a blank vote, and they elect 100 members of the national council.",
+      "text": "More than 112,000 members of the Rassemblement national (RN) are invited to vote until 22 October to elect the party president, ahead of the congress in Orléans on 24 October. Jordan Bardella is the only candidate; members also elect the 100 members of the national council.",
       "quiz": {
         "question": "Until when can RN members vote?",
         "options": [
@@ -325,7 +319,7 @@
           "22 October",
           "18 April"
         ],
-        "explanation": "The online vote is open until 22 October inclusive."
+        "explanation": "The members' vote is open until the evening of Thursday 22 October."
       }
     },
     "zemmour-candidat": {
@@ -423,7 +417,7 @@
         "12 March 2027",
         "1 January 2027"
       ],
-      "explanation": "You must be registered by Friday 12 March 2027 at the latest, online or at the town hall. A procuration (proxy vote), on the other hand, has no fixed deadline: best to do it early."
+      "explanation": "You must be registered by Friday 12 March 2027 at the latest to vote in the first round."
     },
     "q-parrainages": {
       "question": "What is the minimum number of parrainages (sponsorships from elected officials) needed to be a candidate?",
@@ -459,7 +453,7 @@
         "The Conseil constitutionnel (Constitutional Council)",
         "The Assemblée nationale"
       ],
-      "explanation": "The Conseil constitutionnel announces the official results; for the second round, by 12 May 2027 at the latest."
+      "explanation": "The Conseil constitutionnel (Constitutional Council) ensures the election is properly run and announces its results (Article 58 of the Constitution)."
     },
     "q-delai-tours": {
       "question": "How much time is there between the two rounds of the presidential election?",
@@ -478,7 +472,7 @@
     },
     "vf-inscription": {
       "statement": "You can register on the electoral roll up to the day before the vote.",
-      "explanation": "You must be registered by Friday 12 March 2027 at the latest, the 6th Friday before the vote. A procuration (proxy vote), on the other hand, has no fixed deadline: best to do it early."
+      "explanation": "You must be registered by Friday 12 March 2027 at the latest to vote in the first round."
     },
     "vf-majorite": {
       "statement": "A candidate who gets more than 50% of the valid votes in the 1st round is elected without a second round.",
@@ -486,7 +480,7 @@
     },
     "vf-macron-mandat": {
       "statement": "Emmanuel Macron can run again in 2027.",
-      "explanation": "Since 2008, the Constitution says that \"no one may serve more than two consecutive terms\". Emmanuel Macron is finishing his 2nd term: he cannot be a candidate in 2027."
+      "explanation": "Article 6 of the Constitution says that \"no one may serve more than two consecutive terms\". Emmanuel Macron is finishing his 2nd term: he cannot be a candidate in 2027."
     },
     "vf-melenchon": {
       "statement": "Jean-Luc Mélenchon is running in the presidential election for the first time.",
@@ -498,7 +492,7 @@
     },
     "vf-parrainages": {
       "statement": "To be a candidate, you need at least 500 signatures from elected officials from at least 30 départements or overseas territories.",
-      "explanation": "These are the \"parrainages\" (official sponsorships). They must reach the Conseil constitutionnel (Constitutional Council) by 6 pm on 12 March 2027 at the latest, and an elected official can sponsor only one candidate."
+      "explanation": "These are the \"parrainages\" (official sponsorships). They must be submitted by 6 pm on Friday 12 March 2027 at the latest."
     },
     "vf-glucksmann": {
       "statement": "Raphaël Glucksmann won the social democratic left's primary with about 66% of the votes.",
@@ -518,7 +512,7 @@
     },
     "vf-le-pen-candidate": {
       "statement": "After her conviction on appeal on 7 July 2026, Marine Le Pen confirmed that she would be a candidate in 2027.",
-      "explanation": "Among other penalties, the appeal court gave her 15 months of ineligibility with immediate effect, which makes her candidacy \"theoretically possible\". She confirmed it the same day."
+      "explanation": "The appeal court reduced her ineligibility sentence to 45 months, 30 of them suspended: legally, she can run. That same evening, on TF1, she announced: \"Tonight, I am a candidate in the presidential election\"."
     },
     "vf-abstention": {
       "statement": "In 2022, more than 6 in 10 young people aged 18-24 did not vote in the 1st round of the presidential election.",
@@ -555,12 +549,12 @@
       "explanation": "It was Édouard Philippe (Horizons), who presented this pension reform plan on 29 September 2026."
     },
     "qp-attal-controle-continu": {
-      "prompt": "Change Parcoursup and reduce \"the pressure of continuous assessment\" in favour of more final exams",
-      "explanation": "It was Gabriel Attal (Renaissance), at his rally in Lyon on 10 October 2026."
+      "prompt": "Denounce \"a form of pressure\" created by \"continuous assessment\", where \"every grade, from the very first one, can have an impact\"",
+      "explanation": "It was Gabriel Attal (Renaissance), on franceinfo on 15 October 2026."
     },
     "qp-attal-convention": {
-      "prompt": "Choose 150 young people aged 16 to 25 by lot to take part in \"a convention on our proposals\"",
-      "explanation": "It was Gabriel Attal (Renaissance), in his plan for young people presented in Lyon on 10 October 2026."
+      "prompt": "Submit his proposals for young people to a convention of 150 young people chosen by lot from volunteers",
+      "explanation": "It was Gabriel Attal (Renaissance), at his rally in Lyon on 10 October 2026."
     },
     "qp-retailleau-majorite-penale": {
       "prompt": "Revise the Constitution so that \"the age of criminal responsibility for minors is 15\" and introduce minimum sentences",

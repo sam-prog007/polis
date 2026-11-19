@@ -102,11 +102,20 @@ Everything players read is in `content/*.json`. Edit, commit, push: Vercel redep
 | `guide.json` | Voting guide (`/voter`): deadlines (ISO dates), checklists, sources. Update `checked` when you re-verify it. |
 | `timeline.json` | Campaign timeline (`/frise`). |
 | `site.json` | App name, Instagram link, **team contact email for the privacy page (still to fill in)**. |
+| `sources.json` | **Allowlist of source sites**, plus the outlets left out on purpose and why. Checked before every build. |
 | `en/overlay.json` | English translations, matched by id. |
 
 Every question has a `difficulty` from 1 (easy) to 3 (hard). Sources and fact-checks are logged in `content/actu-notes.md` and `content/content-notes.md`.
 
 **Editorial rules:** facts only, a source for every item, as many items about the left as about the right and centre, nothing still uncertain. **Re-check every card the day before a test.**
+
+**Sources (decision D1):** only French public media (franceinfo, ici, France 24, RFI, LCP, Public Sénat…), AFP, official sites (`*.gouv.fr`, Conseil constitutionnel, Assemblée, Sénat…) and large general-interest newspapers with no political line (Le Monde, Les Échos, La Croix, Le Parisien, Ouest-France, large regional dailies). The full list is in `content/sources.json`.
+
+- No partisan outlet on either side: CNews, BFMTV, Europe 1, JDD, Sud Radio, Valeurs actuelles, Frontières, Boulevard Voltaire, L'Humanité, Politis, Le Média. Le Figaro and Libération are left out as a pair: add both or neither.
+- An AFP dispatch counts only on an allowed site ("franceinfo avec AFP"), never "AFP via" a private site.
+- Campaign and party sites are allowed only for programs (`content/programmes/`), never as the source of a news card.
+- If no allowed site reports a fact, leave the item out. Never keep an unsourced fact.
+- `npm run build` first runs `scripts/check-sources.mjs`: a URL on a site that is not in `sources.json` (or a source label with "via" or an excluded outlet's name) stops the build, so the live site keeps the previous version. Run `node scripts/check-sources.mjs` to check by hand. To add a site, add it to `sources.json` only if it fits the rules above.
 
 ## Measuring the test
 

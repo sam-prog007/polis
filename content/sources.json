@@ -1,0 +1,67 @@
+{
+  "about": "Allowlist of the sites a source can come from. scripts/check-sources.mjs checks every URL in content/**/*.json against it before each build: a URL on any other site stops the build. A domain also covers its subdomains (franceinfo.fr covers france3-regions.franceinfo.fr). Before adding a site, read the rules in the README (Editorial rules).",
+  "allowed": [
+    { "domain": "afp.com", "label": "AFP", "kind": "agency", "note": "An AFP dispatch counts only on AFP's own site or on another allowed site (\"franceinfo avec AFP\"), never \"AFP via\" a private site." },
+
+    { "domain": "franceinfo.fr", "label": "franceinfo (France Télévisions, Radio France)", "kind": "public" },
+    { "domain": "francetvinfo.fr", "label": "franceinfo (old address)", "kind": "public" },
+    { "domain": "radiofrance.fr", "label": "Radio France (France Inter, France Culture…)", "kind": "public" },
+    { "domain": "ici.fr", "label": "ICI (ex-France Bleu, Radio France)", "kind": "public" },
+    { "domain": "france24.com", "label": "France 24", "kind": "public" },
+    { "domain": "rfi.fr", "label": "RFI", "kind": "public" },
+    { "domain": "lcp.fr", "label": "LCP – Assemblée nationale", "kind": "public" },
+    { "domain": "publicsenat.fr", "label": "Public Sénat", "kind": "public" },
+    { "domain": "arte.tv", "label": "Arte", "kind": "public" },
+    { "domain": "ina.fr", "label": "INA", "kind": "public" },
+    { "domain": "lumni.fr", "label": "Lumni", "kind": "public" },
+
+    { "domain": "gouv.fr", "label": "Government sites (*.gouv.fr: service-public, Légifrance, ministries…)", "kind": "official" },
+    { "domain": "service-public.fr", "label": "Service-Public.fr", "kind": "official" },
+    { "domain": "vie-publique.fr", "label": "Vie publique (DILA)", "kind": "official" },
+    { "domain": "conseil-constitutionnel.fr", "label": "Conseil constitutionnel", "kind": "official" },
+    { "domain": "assemblee-nationale.fr", "label": "Assemblée nationale", "kind": "official" },
+    { "domain": "senat.fr", "label": "Sénat", "kind": "official" },
+    { "domain": "elysee.fr", "label": "Élysée", "kind": "official" },
+    { "domain": "europa.eu", "label": "European Union (Commission, Parliament, EUR-Lex…)", "kind": "official" },
+    { "domain": "insee.fr", "label": "Insee", "kind": "official" },
+    { "domain": "ccomptes.fr", "label": "Cour des comptes", "kind": "official" },
+    { "domain": "caf.fr", "label": "Caisse d'allocations familiales", "kind": "official" },
+    { "domain": "campusfrance.org", "label": "Campus France", "kind": "official" },
+    { "domain": "lehavre.fr", "label": "Ville du Havre", "kind": "official", "note": "Local authority site." },
+    { "domain": "iledefrance-mobilites.fr", "label": "Île-de-France Mobilités", "kind": "official", "note": "Public transport authority of the Île-de-France region." },
+
+    { "domain": "lemonde.fr", "label": "Le Monde", "kind": "newspaper" },
+    { "domain": "lesechos.fr", "label": "Les Échos", "kind": "newspaper" },
+    { "domain": "la-croix.com", "label": "La Croix", "kind": "newspaper" },
+    { "domain": "leparisien.fr", "label": "Le Parisien", "kind": "newspaper" },
+    { "domain": "ouest-france.fr", "label": "Ouest-France", "kind": "newspaper" },
+    { "domain": "sudouest.fr", "label": "Sud Ouest", "kind": "newspaper" },
+    { "domain": "lavoixdunord.fr", "label": "La Voix du Nord", "kind": "newspaper" },
+    { "domain": "leprogres.fr", "label": "Le Progrès", "kind": "newspaper" }
+  ],
+  "candidateSites": {
+    "about": "Official campaign and party sites. Allowed only in content/programmes/, never as the source of a news card. Add each domain here when the Programmes section is built.",
+    "onlyIn": "content/programmes/",
+    "domains": []
+  },
+  "excluded": [
+    { "domain": "cnews.fr", "label": "CNews", "reason": "Outlet with a political line (right)." },
+    { "domain": "bfmtv.com", "label": "BFMTV", "reason": "Named by the team as a partisan outlet (decision D1)." },
+    { "domain": "europe1.fr", "label": "Europe 1", "reason": "Outlet with a political line (right), same group as CNews." },
+    { "domain": "lejdd.fr", "label": "Le JDD", "reason": "Outlet with a political line (right)." },
+    { "domain": "sudradio.fr", "label": "Sud Radio", "reason": "Outlet with a political line (right)." },
+    { "domain": "valeursactuelles.com", "label": "Valeurs actuelles", "reason": "Outlet with a political line (right)." },
+    { "domain": "frontieresmedia.fr", "label": "Frontières", "reason": "Outlet with a political line (right)." },
+    { "domain": "bvoltaire.fr", "label": "Boulevard Voltaire", "reason": "Outlet with a political line (right)." },
+    { "domain": "humanite.fr", "label": "L'Humanité", "reason": "Outlet with a political line (left)." },
+    { "domain": "politis.fr", "label": "Politis", "reason": "Outlet with a political line (left)." },
+    { "domain": "lemediatv.fr", "label": "Le Média", "reason": "Outlet with a political line (left)." },
+    { "domain": "lefigaro.fr", "label": "Le Figaro", "reason": "Leans right. Left out as a pair with Libération: add both or neither." },
+    { "domain": "liberation.fr", "label": "Libération", "reason": "Leans left. Left out as a pair with Le Figaro: add both or neither." },
+    { "domain": "lagazettefrance.fr", "label": "La Gazette France", "reason": "Republishes AFP dispatches on a private site. Use the same dispatch on an allowed site." },
+    { "domain": "touteleurope.eu", "label": "Toute l'Europe", "reason": "An association, not a news outlet. Use the official source instead." }
+  ],
+  "notSources": [
+    { "file": "content/site.json", "domain": "instagram.com", "why": "The game's own Instagram account, not a source." }
+  ]
+}

@@ -119,7 +119,7 @@
       "title": "À Clermont, Mélenchon veut abolir Parcoursup",
       "text": "Lors d'un meeting au Zénith de Clermont-Ferrand le 11 octobre, Jean-Luc Mélenchon (LFI) a déclaré que « Parcoursup doit être aboli » et s'est dit opposé à la sélection à l'université. Il a aussi proposé d'abaisser l'âge du droit de vote à 16 ans.",
       "why": "Parcoursup est la plateforme d'admission dans l'enseignement supérieur après le bac.",
-      "source": { "label": "AFP via Sud Radio", "url": "https://www.sudradio.fr/societe/a-clermont-ferrand-melenchon-fait-salle-comble-pour-denoncer-lignominie-parcoursup" },
+      "source": { "label": "ICI avec AFP", "url": "https://www.ici.fr/infos/politique/clermont-ferrand-jean-luc-melenchon-fait-salle-comble-pour-denoncer-l-ignominie-de-parcoursup-8591843" },
       "quiz": {
         "question": "À quel âge Jean-Luc Mélenchon propose-t-il d'ouvrir le droit de vote ?",
         "options": ["16 ans", "17 ans", "18 ans"],
@@ -135,16 +135,13 @@
       "camp": "centre",
       "actor": "Renaissance",
       "title": "Attal présente un « pacte pour la jeunesse »",
-      "text": "À Lyon le 10 octobre, Gabriel Attal (Renaissance) a proposé de garder Parcoursup en le réformant, avec moins de contrôle continu et plus d'épreuves finales. Il veut aussi moins d'élèves par classe et une convention de 150 jeunes de 16 à 25 ans tirés au sort.",
-      "sides": [
-        { "label": "LFI (Jean-Luc Mélenchon)", "text": "a répondu sur X en dénonçant une « consternante duplicité d'Attal »." }
-      ],
-      "source": { "label": "AFP via La Gazette France", "url": "https://www.lagazettefrance.fr/article/presidentielle-attal-melenchon-pour-les-candidats-l-atout-ou-le-peril-jeune" },
+      "text": "À Lyon le 10 octobre, Gabriel Attal (Renaissance) a présenté son « pacte pour la jeunesse » : « moins d'élèves par classe et plus de professeurs devant les élèves », des enseignants mieux payés et des études supérieures plus courtes. Il ne veut pas supprimer Parcoursup, mais le « faire évoluer ».",
+      "source": { "label": "franceinfo (France 3 Auvergne-Rhône-Alpes)", "url": "https://france3-regions.franceinfo.fr/auvergne-rhone-alpes/rhone/lyon/en-meeting-a-lyon-le-candidat-renaissance-gabriel-attal-a-presente-son-pacte-pour-la-jeunesse-3431238.html" },
       "quiz": {
         "question": "Que propose Gabriel Attal pour Parcoursup ?",
         "options": ["Le supprimer", "Le remplacer par un tirage au sort", "Le garder en le réformant"],
         "answer": 2,
-        "explanation": "Il veut le conserver, avec moins de contrôle continu et plus d'accompagnement.",
+        "explanation": "Il ne veut pas le supprimer, mais le « faire évoluer ».",
         "difficulty": 2
       }
     },
@@ -155,9 +152,9 @@
       "camp": "droite",
       "actor": "Gilles Platret (divers droite)",
       "title": "Gilles Platret se déclare candidat",
-      "text": "Le 8 octobre, Gilles Platret, maire de Chalon-sur-Saône (divers droite, ex-LR), a officialisé sa candidature lors d'une réunion publique dans sa ville. Il propose d'abroger les 35 heures et de rétablir les frontières nationales. Il doit encore réunir 500 parrainages.",
+      "text": "Le 8 octobre, Gilles Platret, maire divers droite de Chalon-sur-Saône et ancien vice-président des Républicains, s'est déclaré candidat. Il veut abroger les 35 heures et « rétablir les frontières ».",
       "why": "La durée légale de 35 heures par semaine fixe le seuil à partir duquel on compte des heures supplémentaires.",
-      "source": { "label": "Lyon Capitale", "url": "https://www.lyoncapitale.fr/?p=521848" },
+      "source": { "label": "franceinfo", "url": "https://www.franceinfo.fr/elections/presidentielle/portraits-qui-sont-les-candidats-declares-a-l-election-presidentielle-de-2027_8208032.html" },
       "quiz": {
         "question": "Que propose Gilles Platret sur le temps de travail ?",
         "options": ["Passer à 32 heures", "Abroger les 35 heures", "Garder les 35 heures"],
@@ -262,13 +259,13 @@
       "camp": "centre",
       "actor": "Olivier Becht",
       "title": "Olivier Becht candidat de « l'extrême centre »",
-      "text": "Le 24 septembre, dans Paris Match, le député du Haut-Rhin Olivier Becht, ancien ministre délégué au Commerce extérieur, a annoncé sa candidature. Il se dit « à l'extrême centre » et présente un projet intitulé « Le Projet France, Refonder ou Périr ».",
-      "source": { "label": "Sud Radio", "url": "https://www.sudradio.fr/politique/qui-est-olivier-becht-cet-ancien-ministre-qui-se-lance-dans-la-course-a-lelysee" },
+      "text": "Olivier Becht, député du Haut-Rhin apparenté Renaissance et ancien ministre du Commerce extérieur sous Élisabeth Borne, est candidat à la présidentielle. Il veut incarner « l'extrême centre » et propose notamment un « CDI universel ».",
+      "source": { "label": "franceinfo", "url": "https://www.franceinfo.fr/elections/presidentielle/portraits-qui-sont-les-candidats-declares-a-l-election-presidentielle-de-2027_8208032.html" },
       "quiz": {
         "question": "Quel poste ministériel Olivier Becht a-t-il occupé ?",
-        "options": ["Ministre de l'Intérieur", "Ministre délégué au Commerce extérieur", "Ministre de l'Éducation"],
+        "options": ["Ministre de l'Intérieur", "Ministre du Commerce extérieur", "Ministre de l'Éducation"],
         "answer": 1,
-        "explanation": "Il a été ministre délégué au Commerce extérieur de 2022 à janvier 2024.",
+        "explanation": "Il a été ministre du Commerce extérieur dans le gouvernement d'Élisabeth Borne.",
         "difficulty": 3
       }
     },
@@ -329,13 +326,13 @@
       "camp": "extreme-droite",
       "actor": "Rassemblement national",
       "title": "RN : Bardella seul candidat à sa réélection",
-      "text": "Plus de 112 000 adhérents du RN sont appelés à voter en ligne jusqu'au 22 octobre pour élire le président du parti, avant un congrès à Orléans fin octobre. Jordan Bardella est le seul candidat ; les adhérents peuvent aussi voter blanc et élisent 100 membres du conseil national.",
-      "source": { "label": "AFP via La Gazette France", "url": "https://www.lagazettefrance.fr/article/rn-plus-de-112-000-adherents-appeles-a-reelire-bardella-fin-octobre" },
+      "text": "Plus de 112 000 adhérents du RN sont appelés à voter jusqu'au 22 octobre pour élire le président du parti, avant le congrès d'Orléans du 24 octobre. Jordan Bardella est le seul candidat ; les adhérents élisent aussi les 100 membres du conseil national.",
+      "source": { "label": "LCP", "url": "https://lcp.fr/actualites/quels-sont-les-enjeux-du-congres-du-rassemblement-national-qui-se-tient-ce-week-end-a" },
       "quiz": {
         "question": "Jusqu'à quand les adhérents du RN peuvent-ils voter ?",
         "options": ["5 novembre", "22 octobre", "18 avril"],
         "answer": 1,
-        "explanation": "Le vote en ligne est ouvert jusqu'au 22 octobre inclus.",
+        "explanation": "Le vote des adhérents est ouvert jusqu'au jeudi 22 octobre au soir.",
         "difficulty": 3
       }
     },

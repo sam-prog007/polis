@@ -352,6 +352,7 @@ function InfoSheet({ onClose, interests, position }: { onClose: () => void; inte
             </li>
           )}
           <li>✅ {t("Chaque carte a une source. On ne te dira jamais pour qui voter.", "Every card has a source. We will never tell you who to vote for.")}</li>
+          <li>📰 {t("Nos sources : médias publics, AFP, sites officiels et grands quotidiens sans ligne partisane.", "Our sources: public media, AFP, official sites and major newspapers with no partisan line.")}</li>
         </ul>
         <Link href="/profil" className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[14px] bg-fill font-semibold text-accent">
           {t("Modifier mes sujets", "Edit my topics")}

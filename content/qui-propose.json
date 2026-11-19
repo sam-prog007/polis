@@ -7,8 +7,8 @@
       "answer": 2,
       "explanation": "C'est Jean-Luc Mélenchon (LFI), lors de son meeting au Zénith de Clermont-Ferrand le 11 octobre 2026.",
       "source": {
-        "label": "AFP via Sud Radio",
-        "url": "https://www.sudradio.fr/societe/a-clermont-ferrand-melenchon-fait-salle-comble-pour-denoncer-lignominie-parcoursup"
+        "label": "ICI avec AFP",
+        "url": "https://www.ici.fr/infos/politique/clermont-ferrand-jean-luc-melenchon-fait-salle-comble-pour-denoncer-l-ignominie-de-parcoursup-8591843"
       },
       "difficulty": 1
     },
@@ -50,25 +50,25 @@
     },
     {
       "id": "qp-attal-controle-continu",
-      "prompt": "Faire évoluer Parcoursup et réduire « la pression du contrôle continu » au profit de davantage d'épreuves terminales",
+      "prompt": "Dénoncer « une forme de pression » née du « contrôle continu », où « chaque note depuis la première peut avoir un impact »",
       "options": ["Jean-Luc Mélenchon", "Gabriel Attal", "Éric Zemmour", "Raphaël Glucksmann"],
       "answer": 1,
-      "explanation": "C'est Gabriel Attal (Renaissance), lors de son meeting de Lyon le 10 octobre 2026.",
+      "explanation": "C'est Gabriel Attal (Renaissance), sur franceinfo le 15 octobre 2026.",
       "source": {
-        "label": "AFP via La Gazette France",
-        "url": "https://www.lagazettefrance.fr/article/presidentielle-attal-melenchon-pour-les-candidats-l-atout-ou-le-peril-jeune"
+        "label": "franceinfo",
+        "url": "https://www.franceinfo.fr/societe/education/blocage-des-lycees/le-nombre-de-lycees-bloques-ne-peut-pas-etre-le-barometre-du-mouvement-car-le-malaise-reste-assure-gabriel-attal_8238310.html"
       },
       "difficulty": 2
     },
     {
       "id": "qp-attal-convention",
-      "prompt": "Tirer au sort 150 jeunes de 16 à 25 ans pour participer à « une convention sur nos propositions »",
+      "prompt": "Soumettre ses propositions pour la jeunesse à une convention de 150 jeunes tirés au sort parmi des volontaires",
       "options": ["Marine Le Pen", "Jean-Luc Mélenchon", "Bruno Retailleau", "Gabriel Attal"],
       "answer": 3,
-      "explanation": "C'est Gabriel Attal (Renaissance), dans son projet pour la jeunesse présenté à Lyon le 10 octobre 2026.",
+      "explanation": "C'est Gabriel Attal (Renaissance), lors de son meeting de Lyon le 10 octobre 2026.",
       "source": {
-        "label": "AFP via La Gazette France",
-        "url": "https://www.lagazettefrance.fr/article/presidentielle-attal-melenchon-pour-les-candidats-l-atout-ou-le-peril-jeune"
+        "label": "franceinfo",
+        "url": "https://www.franceinfo.fr/politique/gabriel-attal/je-veux-etre-le-president-qui-parlera-a-la-jeunesse-parce-qu-il-la-comprend-en-meeting-a-lyon-gabriel-attal-tente-de-relancer-sa-campagne-en-pleine-mobilisation-lyceenne_8231377.html"
       },
       "difficulty": 3
     },
